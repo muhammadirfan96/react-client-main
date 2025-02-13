@@ -1,10 +1,10 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const barSlice = createSlice({
-  name: 'bar',
+  name: "bar",
   initialState: {
     sidebar: true,
-    bottombar: false
+    bottombar: false,
   },
   reducers: {
     setSidebar(state) {
@@ -12,8 +12,8 @@ const barSlice = createSlice({
     },
     setBottombar(state) {
       state.bottombar = !state.bottombar;
-    }
-  }
+    },
+  },
 });
 
 export const { setSidebar, setBottombar } = barSlice.actions;

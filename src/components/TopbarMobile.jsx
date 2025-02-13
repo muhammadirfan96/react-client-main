@@ -1,17 +1,17 @@
-import Logout from '../auth/Logout.jsx';
-import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import Logout from "../auth/Logout.jsx";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const TopbarMobile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const username = useSelector(state => state.jwToken.username);
+  const username = useSelector((state) => state.jwToken.username);
 
   return (
     <>
       <div className="p-4 pt-3 bg-teal-700 fixed md:hidden top-0 right-0 left-0 h-16">
         <p className="text-2xl md:text-4xl font-bold text-white mb-1">
-          <button onClick={() => navigate('/')} className="font-din">
+          <button onClick={() => navigate("/")} className="font-din">
             MERN STACK
           </button>
         </p>
@@ -25,13 +25,15 @@ const TopbarMobile = () => {
           ) : (
             <div className="flex">
               <button
-                onClick={() => navigate('/login')}
-                className="bg-teal-300 p-1 m-1 rounded shadow">
+                onClick={() => navigate("/login")}
+                className="bg-teal-300 p-1 m-1 rounded shadow"
+              >
                 login
               </button>
               <button
-                onClick={() => navigate('/register')}
-                className="bg-teal-300 p-1 m-1 rounded shadow">
+                onClick={() => navigate("/register")}
+                className="bg-teal-300 p-1 m-1 rounded shadow"
+              >
                 register
               </button>
             </div>

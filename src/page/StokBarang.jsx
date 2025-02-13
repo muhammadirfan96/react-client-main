@@ -1,34 +1,34 @@
-import { useState, useEffect } from 'react';
-import { axiosRT } from '../config/axios.js';
-import { useDispatch, useSelector } from 'react-redux';
-import { setNotification } from '../redux/notificationSlice.js';
-import { setConfirmation } from '../redux/confirmationSlice.js';
-import { HiMiniMagnifyingGlass } from 'react-icons/hi2';
+import { useState, useEffect } from "react";
+import { axiosRT } from "../config/axios.js";
+import { useDispatch, useSelector } from "react-redux";
+import { setNotification } from "../redux/notificationSlice.js";
+import { setConfirmation } from "../redux/confirmationSlice.js";
+import { HiMiniMagnifyingGlass } from "react-icons/hi2";
 
 const StokBarang = () => {
   const dispatch = useDispatch();
 
-  const token = useSelector(state => state.jwToken.token);
-  const expire = useSelector(state => state.jwToken.expire);
+  const token = useSelector((state) => state.jwToken.token);
+  const expire = useSelector((state) => state.jwToken.expire);
 
   const axiosInterceptors = axiosRT(token, expire, dispatch);
 
   // submit
-  const [minimal, setMinimal] = useState('');
-  const [maksimal, setMaksimal] = useState('');
-  const [id_inventaris_barang, setid_inventaris_barang] = useState('');
+  const [minimal, setMinimal] = useState("");
+  const [maksimal, setMaksimal] = useState("");
+  const [id_inventaris_barang, setid_inventaris_barang] = useState("");
   const [errForm, setErrForm] = useState(null);
   const [form, setForm] = useState(null);
 
   const handleAdd = () => {
     setForm(null);
-    setNamaModal('add stok barang');
+    setNamaModal("add stok barang");
     openModal();
   };
 
-  const handleUpdate = async id => {
+  const handleUpdate = async (id) => {
     setForm({ id: id });
-    setNamaModal('update stok barang');
+    setNamaModal("update stok barang");
     const oldData = await axiosInterceptors.get(`/stok-barang/${id}`);
     const inventori = await axiosInterceptors.get(
       `/inventori-barang/${oldData.data?.id_inventaris_barang}`
@@ -41,12 +41,12 @@ const StokBarang = () => {
     setNamaInventoriBarang(inventori.data.nama);
   };
 
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     form ? updateData(form.id) : addData();
   };
 
-  const handleDelete = id => {
+  const handleDelete = (id) => {
     deleteData(id);
     dispatch(setConfirmation(false));
   };
@@ -56,58 +56,58 @@ const StokBarang = () => {
       await axiosInterceptors.post(`/stok-barang`, {
         minimal,
         maksimal,
-        id_inventaris_barang
+        id_inventaris_barang,
       });
       dispatch(
         setNotification({
-          message: 'new data has been added',
-          background: 'bg-teal-100'
+          message: "new data has been added",
+          background: "bg-teal-100",
         })
       );
       closeModal();
       findStokBarang();
     } catch (e) {
-      const arrError = e.response.data.error.split(',');
+      const arrError = e.response.data.error.split(",");
       setErrForm(arrError);
     }
   };
 
-  const updateData = async id => {
+  const updateData = async (id) => {
     try {
       await axiosInterceptors.patch(`/stok-barang/${id}`, {
         minimal,
         maksimal,
-        id_inventaris_barang
+        id_inventaris_barang,
       });
 
       dispatch(
         setNotification({
-          message: 'selected data has been updated',
-          background: 'bg-teal-100'
+          message: "selected data has been updated",
+          background: "bg-teal-100",
         })
       );
       closeModal();
       findStokBarang();
     } catch (e) {
-      const arrError = e.response.data.error.split(',');
+      const arrError = e.response.data.error.split(",");
       setErrForm(arrError);
     }
   };
 
-  const deleteData = async id => {
+  const deleteData = async (id) => {
     try {
       await axiosInterceptors.delete(`/stok-barang/${id}`);
       dispatch(
         setNotification({
-          message: 'selected data has been deleted',
-          background: 'bg-teal-100'
+          message: "selected data has been deleted",
+          background: "bg-teal-100",
         })
       );
       findStokBarang();
     } catch (e) {
-      const arrError = e.response.data.error.split(',');
+      const arrError = e.response.data.error.split(",");
       dispatch(
-        setNotification({ message: arrError, background: 'bg-red-100' })
+        setNotification({ message: arrError, background: "bg-red-100" })
       );
     }
   };
@@ -118,9 +118,9 @@ const StokBarang = () => {
 
   const [limit, setLimit] = useState(4);
   const [page, setPage] = useState(1);
-  const [key, setKey] = useState('');
-  const [search, setSearch] = useState('');
-  const [searchBased, setSearchBased] = useState('id_inventaris_barang');
+  const [key, setKey] = useState("");
+  const [search, setSearch] = useState("");
+  const [searchBased, setSearchBased] = useState("id_inventaris_barang");
 
   const findStokBarang = async () => {
     try {
@@ -128,18 +128,18 @@ const StokBarang = () => {
         `/stok-barang?limit=${limit}&page=${page}&${key}`
       );
 
-      const addedItemPromises = response.data.data.map(async element => {
+      const addedItemPromises = response.data.data.map(async (element) => {
         const [namaRes, createdByRes, updatedByRes] = await Promise.all([
           axiosInterceptors.get(
             `/inventori-barang/${element.id_inventaris_barang}`
           ),
           axiosInterceptors.get(`/user/${element.createdBy}`),
-          axiosInterceptors.get(`/user/${element.updatedBy}`)
+          axiosInterceptors.get(`/user/${element.updatedBy}`),
         ]);
         return {
           nama: namaRes.data.nama,
           createdBy: createdByRes.data.email,
-          updatedBy: updatedByRes.data.email
+          updatedBy: updatedByRes.data.email,
         };
       });
 
@@ -149,15 +149,15 @@ const StokBarang = () => {
         ...item,
         nama: addedItem[index].nama,
         created_by: addedItem[index].createdBy,
-        updated_by: addedItem[index].updatedBy
+        updated_by: addedItem[index].updatedBy,
       }));
 
       setStokBarang(result);
       setAllPage(response.data.all_page);
     } catch (e) {
-      const arrError = e.response.data.error.split(',');
+      const arrError = e.response.data.error.split(",");
       dispatch(
-        setNotification({ message: arrError, background: 'bg-red-100' })
+        setNotification({ message: arrError, background: "bg-red-100" })
       );
     }
   };
@@ -168,25 +168,26 @@ const StokBarang = () => {
       <button
         onClick={() => setPage(i)}
         className={`${
-          i == page ? 'bg-teal-300' : ''
-        } text-xs px-1 mx-1 rounded border border-teal-100`}>
+          i == page ? "bg-teal-300" : ""
+        } text-xs px-1 mx-1 rounded border border-teal-100`}
+      >
         {i}
       </button>
     );
   }
 
   // modal
-  const [namaModal, setNamaModal] = useState('');
+  const [namaModal, setNamaModal] = useState("");
   const [showModal, setShowModal] = useState(false);
   const openModal = () => setShowModal(true);
   const closeModal = () => {
     setShowModal(false);
     setErrForm(null);
-    setMinimal('');
-    setMaksimal('');
-    setid_inventaris_barang('');
+    setMinimal("");
+    setMaksimal("");
+    setid_inventaris_barang("");
     setInputInventoriBarang(true);
-    setNamaInventoriBarang('');
+    setNamaInventoriBarang("");
   };
 
   useEffect(() => {
@@ -195,7 +196,7 @@ const StokBarang = () => {
 
   // option select
   const [inventoriBarang, setInventoriBarang] = useState([]);
-  const [keyInventoriBarang, setKeyInventoriBarang] = useState('');
+  const [keyInventoriBarang, setKeyInventoriBarang] = useState("");
 
   const findInventoriBarang = async () => {
     try {
@@ -204,9 +205,9 @@ const StokBarang = () => {
       );
       setInventoriBarang(response.data.data);
     } catch (e) {
-      const arrError = e.response.data.error.split(',');
+      const arrError = e.response.data.error.split(",");
       dispatch(
-        setNotification({ message: arrError, background: 'bg-red-100' })
+        setNotification({ message: arrError, background: "bg-red-100" })
       );
     }
   };
@@ -217,13 +218,13 @@ const StokBarang = () => {
 
   //  input id_inventaris_barang
   const [inputInventoriBarang, setInputInventoriBarang] = useState(true);
-  const [namaInventoriBarang, setNamaInventoriBarang] = useState('');
+  const [namaInventoriBarang, setNamaInventoriBarang] = useState("");
 
-  const handleChangeOptionSelect = event => {
+  const handleChangeOptionSelect = (event) => {
     const selected = event.target[event.target.selectedIndex];
     setid_inventaris_barang(selected.value);
     setInputInventoriBarang(true);
-    setNamaInventoriBarang(selected.getAttribute('data-additional-info'));
+    setNamaInventoriBarang(selected.getAttribute("data-additional-info"));
   };
 
   return token ? (
@@ -243,25 +244,25 @@ const StokBarang = () => {
                 <input
                   type="button"
                   value="4"
-                  onClick={e => setLimit(e.target.value)}
+                  onClick={(e) => setLimit(e.target.value)}
                   className={`${
-                    limit == 4 ? 'bg-teal-300' : ''
+                    limit == 4 ? "bg-teal-300" : ""
                   } text-xs px-2 mx-1 rounded border border-teal-100`}
                 />
                 <input
                   type="button"
                   value="6"
-                  onClick={e => setLimit(e.target.value)}
+                  onClick={(e) => setLimit(e.target.value)}
                   className={`${
-                    limit == 6 ? 'bg-teal-300' : ''
+                    limit == 6 ? "bg-teal-300" : ""
                   } text-xs px-2 mx-1 rounded border border-teal-100`}
                 />
                 <input
                   type="button"
                   value="8"
-                  onClick={e => setLimit(e.target.value)}
+                  onClick={(e) => setLimit(e.target.value)}
                   className={`${
-                    limit == 8 ? 'bg-teal-300' : ''
+                    limit == 8 ? "bg-teal-300" : ""
                   } text-xs px-2 mx-1 rounded border border-teal-100`}
                 />
               </div>
@@ -274,14 +275,16 @@ const StokBarang = () => {
               <p className="text-xs border-b border-teal-300">
                 <select
                   value={searchBased}
-                  onChange={e => setSearchBased(e.target.value)}>
+                  onChange={(e) => setSearchBased(e.target.value)}
+                >
                   <option selected value="id_inventaris_barang">
                     inventori
                   </option>
                 </select>
                 <button
                   onClick={() => setKey(`${searchBased}=${search}`)}
-                  className="text-xs text-white italic bg-green-700 p-1 ml-1 rounded">
+                  className="text-xs text-white italic bg-green-700 p-1 ml-1 rounded"
+                >
                   <HiMiniMagnifyingGlass />
                 </button>
               </p>
@@ -292,7 +295,7 @@ const StokBarang = () => {
                   placeholder="..."
                   className="border border-teal-100 rounded"
                   value={search}
-                  onChange={e => setSearch(e.target.value)}
+                  onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
             </div>
@@ -300,7 +303,8 @@ const StokBarang = () => {
           {/*btn add*/}
           <button
             onClick={handleAdd}
-            className="w-full p-1 mb-2 rounded-md border bg-teal-300 text-xs">
+            className="w-full p-1 mb-2 rounded-md border bg-teal-300 text-xs"
+          >
             add data
           </button>
 
@@ -317,7 +321,7 @@ const StokBarang = () => {
                 <th className="px-2">updated_at</th>
                 <th className="px-2">action</th>
               </tr>
-              {stokBarang.map(each => (
+              {stokBarang.map((each) => (
                 <tr key={each._id} className="border-b border-teal-300">
                   <td className="px-2">{each.nama}</td>
                   <td className="px-2">{each.minimal}</td>
@@ -329,7 +333,8 @@ const StokBarang = () => {
                   <td className="px-2">
                     <button
                       onClick={() => handleUpdate(each._id)}
-                      className="text-xs w-full italic rounded p-1 bg-green-700 text-white">
+                      className="text-xs w-full italic rounded p-1 bg-green-700 text-white"
+                    >
                       update
                     </button>
                     <button
@@ -337,13 +342,15 @@ const StokBarang = () => {
                         dispatch(
                           setConfirmation({
                             message:
-                              'the selected data will be permanently delete ?',
+                              "the selected data will be permanently delete ?",
                             handleOke: () => handleDelete(each._id),
-                            handleCancel: () => dispatch(setConfirmation(false))
+                            handleCancel: () =>
+                              dispatch(setConfirmation(false)),
                           })
                         )
                       }
-                      className="text-xs w-full italic rounded p-1 bg-red-700 text-white">
+                      className="text-xs w-full italic rounded p-1 bg-red-700 text-white"
+                    >
                       delete
                     </button>
                   </td>
@@ -363,7 +370,8 @@ const StokBarang = () => {
             </p>
             <button
               onClick={closeModal}
-              className="absolute -right-1 -top-1 rounded bg-red-700 px-1 text-white">
+              className="absolute -right-1 -top-1 rounded bg-red-700 px-1 text-white"
+            >
               x
             </button>
             <div className="max-h-96 md:max-h-72 overflow-auto p-2 mt-1">
@@ -379,7 +387,8 @@ const StokBarang = () => {
                   <button
                     type="button"
                     className="w-full p-1 mb-1 rounded-md border text-start"
-                    onClick={() => setInputInventoriBarang(false)}>
+                    onClick={() => setInputInventoriBarang(false)}
+                  >
                     {namaInventoriBarang ? (
                       namaInventoriBarang
                     ) : (
@@ -391,14 +400,16 @@ const StokBarang = () => {
                     <select
                       value={id_inventaris_barang}
                       onChange={handleChangeOptionSelect}
-                      className="w-[50%] p-1 mb-1 rounded-md rounded-r-none border">
+                      className="w-[50%] p-1 mb-1 rounded-md rounded-r-none border"
+                    >
                       <option selected value="">
                         list inventori...
                       </option>
-                      {inventoriBarang.map(each => (
+                      {inventoriBarang.map((each) => (
                         <option
                           value={each._id}
-                          data-additional-info={each.nama}>
+                          data-additional-info={each.nama}
+                        >
                           {each.nama}
                         </option>
                       ))}
@@ -408,7 +419,7 @@ const StokBarang = () => {
                       placeholder="search_inventori"
                       className="w-[50%] p-1 mb-1 rounded-md rounded-l-none border"
                       value={keyInventoriBarang}
-                      onChange={e => setKeyInventoriBarang(e.target.value)}
+                      onChange={(e) => setKeyInventoriBarang(e.target.value)}
                     />
                   </div>
                 )}
@@ -417,18 +428,19 @@ const StokBarang = () => {
                   placeholder="minimal"
                   className="w-full p-1 mb-1 rounded-md border"
                   value={minimal}
-                  onChange={e => setMinimal(e.target.value)}
+                  onChange={(e) => setMinimal(e.target.value)}
                 />
                 <input
                   type="number"
                   placeholder="maksimal"
                   className="w-full p-1 mb-1 rounded-md border"
                   value={maksimal}
-                  onChange={e => setMaksimal(e.target.value)}
+                  onChange={(e) => setMaksimal(e.target.value)}
                 />
                 <button
                   type="submit"
-                  className="w-full p-1 mb-1 rounded-md border bg-teal-300">
+                  className="w-full p-1 mb-1 rounded-md border bg-teal-300"
+                >
                   submit
                 </button>
               </form>

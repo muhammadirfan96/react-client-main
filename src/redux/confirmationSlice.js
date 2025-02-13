@@ -1,15 +1,15 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const confirmationSlice = createSlice({
-  name: 'confirmationAlert',
+  name: "confirmationAlert",
   initialState: {
-    confirmation: false
+    confirmation: false,
   },
   reducers: {
     setConfirmation(state, action) {
       state.confirmation = action.payload;
-    }
-  }
+    },
+  },
 });
 
 export const { setConfirmation } = confirmationSlice.actions;

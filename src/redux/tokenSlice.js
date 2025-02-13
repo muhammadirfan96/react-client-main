@@ -1,12 +1,12 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const tokenSlice = createSlice({
-  name: 'jwToken',
+  name: "jwToken",
   initialState: {
-    token: '',
-    expire: '',
-    username: '',
-    role: ''
+    token: "",
+    expire: "",
+    username: "",
+    role: "",
   },
   reducers: {
     setToken(state, action) {
@@ -20,8 +20,8 @@ const tokenSlice = createSlice({
     },
     setRole(state, action) {
       state.role = action.payload;
-    }
-  }
+    },
+  },
 });
 
 export const { setToken, setExpire, setUsername, setRole } = tokenSlice.actions;

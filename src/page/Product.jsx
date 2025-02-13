@@ -1,44 +1,44 @@
-import { useState, useEffect } from 'react';
-import { axiosRT } from '../config/axios.js';
-import { useDispatch, useSelector } from 'react-redux';
-import { setNotification } from '../redux/notificationSlice.js';
-import { setConfirmation } from '../redux/confirmationSlice.js';
+import { useState, useEffect } from "react";
+import { axiosRT } from "../config/axios.js";
+import { useDispatch, useSelector } from "react-redux";
+import { setNotification } from "../redux/notificationSlice.js";
+import { setConfirmation } from "../redux/confirmationSlice.js";
 
 const Product = () => {
   const dispatch = useDispatch();
 
-  const token = useSelector(state => state.jwToken.token);
-  const expire = useSelector(state => state.jwToken.expire);
+  const token = useSelector((state) => state.jwToken.token);
+  const expire = useSelector((state) => state.jwToken.expire);
 
   const axiosInterceptors = axiosRT(token, expire, dispatch);
 
   // submit
-  const [name, setName] = useState('');
-  const [price, setPrice] = useState('');
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
   const [errForm, setErrForm] = useState(null);
   const [form, setForm] = useState(null);
 
   const handleAdd = () => {
     setForm(null);
-    setNamaModal('add product');
+    setNamaModal("add product");
     openModal();
   };
 
-  const handleUpdate = async id => {
+  const handleUpdate = async (id) => {
     setForm({ id: id });
-    setNamaModal('update product');
+    setNamaModal("update product");
     const oldData = await axiosInterceptors.get(`/product/${id}`);
     openModal();
     setName(oldData.data?.name);
     setPrice(oldData.data?.price);
   };
 
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     form ? updateData(form.id) : addData();
   };
 
-  const handleDelete = id => {
+  const handleDelete = (id) => {
     deleteData(id);
     dispatch(setConfirmation(false));
   };
@@ -48,53 +48,53 @@ const Product = () => {
       await axiosInterceptors.post(`/product`, { name, price });
       dispatch(
         setNotification({
-          message: 'new data has been added',
-          background: 'bg-teal-100'
+          message: "new data has been added",
+          background: "bg-teal-100",
         })
       );
       closeModal();
       getProducts();
     } catch (e) {
-      const arrError = e.response.data.error.split(',');
+      const arrError = e.response.data.error.split(",");
       setErrForm(arrError);
     }
   };
 
-  const updateData = async id => {
+  const updateData = async (id) => {
     try {
       await axiosInterceptors.patch(`/product/${id}`, {
         name,
-        price
+        price,
       });
 
       dispatch(
         setNotification({
-          message: 'selected data has been updated',
-          background: 'bg-teal-100'
+          message: "selected data has been updated",
+          background: "bg-teal-100",
         })
       );
       closeModal();
       getProducts();
     } catch (e) {
-      const arrError = e.response.data.error.split(',');
+      const arrError = e.response.data.error.split(",");
       setErrForm(arrError);
     }
   };
 
-  const deleteData = async id => {
+  const deleteData = async (id) => {
     try {
       await axiosInterceptors.delete(`/product/${id}`);
       dispatch(
         setNotification({
-          message: 'selected data has been deleted',
-          background: 'bg-teal-100'
+          message: "selected data has been deleted",
+          background: "bg-teal-100",
         })
       );
       getProducts();
     } catch (e) {
-      const arrError = e.response.data.error.split(',');
+      const arrError = e.response.data.error.split(",");
       dispatch(
-        setNotification({ message: arrError, background: 'bg-red-100' })
+        setNotification({ message: arrError, background: "bg-red-100" })
       );
     }
   };
@@ -105,9 +105,9 @@ const Product = () => {
 
   const [limit, setLimit] = useState(4);
   const [page, setPage] = useState(1);
-  const [key, setKey] = useState('');
-  const [search, setSearch] = useState('');
-  const [searchBased, setSearchBased] = useState('name');
+  const [key, setKey] = useState("");
+  const [search, setSearch] = useState("");
+  const [searchBased, setSearchBased] = useState("name");
 
   const getProducts = async () => {
     try {
@@ -117,9 +117,9 @@ const Product = () => {
       setProducts(response.data.data);
       setAllPage(response.data.all_page);
     } catch (e) {
-      const arrError = e.response.data.error.split(',');
+      const arrError = e.response.data.error.split(",");
       dispatch(
-        setNotification({ message: arrError, background: 'bg-red-100' })
+        setNotification({ message: arrError, background: "bg-red-100" })
       );
     }
   };
@@ -130,22 +130,23 @@ const Product = () => {
       <button
         onClick={() => setPage(i)}
         className={`${
-          i == page ? 'bg-teal-300' : ''
-        } text-xs px-1 mx-1 rounded border border-teal-100`}>
+          i == page ? "bg-teal-300" : ""
+        } text-xs px-1 mx-1 rounded border border-teal-100`}
+      >
         {i}
       </button>
     );
   }
 
   // modal
-  const [namaModal, setNamaModal] = useState('');
+  const [namaModal, setNamaModal] = useState("");
   const [showModal, setShowModal] = useState(false);
   const openModal = () => setShowModal(true);
   const closeModal = () => {
     setShowModal(false);
     setErrForm(null);
-    setName('');
-    setPrice('');
+    setName("");
+    setPrice("");
   };
 
   useEffect(() => {
@@ -164,25 +165,25 @@ const Product = () => {
                   <input
                     type="button"
                     value="4"
-                    onClick={e => setLimit(e.target.value)}
+                    onClick={(e) => setLimit(e.target.value)}
                     className={`${
-                      limit == 4 ? 'bg-teal-300' : ''
+                      limit == 4 ? "bg-teal-300" : ""
                     } text-xs px-2 mx-1 rounded border border-teal-100`}
                   />
                   <input
                     type="button"
                     value="6"
-                    onClick={e => setLimit(e.target.value)}
+                    onClick={(e) => setLimit(e.target.value)}
                     className={`${
-                      limit == 6 ? 'bg-teal-300' : ''
+                      limit == 6 ? "bg-teal-300" : ""
                     } text-xs px-2 mx-1 rounded border border-teal-100`}
                   />
                   <input
                     type="button"
                     value="8"
-                    onClick={e => setLimit(e.target.value)}
+                    onClick={(e) => setLimit(e.target.value)}
                     className={`${
-                      limit == 8 ? 'bg-teal-300' : ''
+                      limit == 8 ? "bg-teal-300" : ""
                     } text-xs px-2 mx-1 rounded border border-teal-100`}
                   />
                 </div>
@@ -195,13 +196,15 @@ const Product = () => {
                 <p className="text-xs border-b border-teal-300">
                   <select
                     value={searchBased}
-                    onChange={e => setSearchBased(e.target.value)}>
+                    onChange={(e) => setSearchBased(e.target.value)}
+                  >
                     <option selected>name</option>
                     <option disabled>price</option>
                   </select>
                   <button
                     onClick={() => setKey(`${searchBased}=${search}`)}
-                    className="text-xs text-white italic bg-green-700 px-1 rounded">
+                    className="text-xs text-white italic bg-green-700 px-1 rounded"
+                  >
                     go
                   </button>
                 </p>
@@ -212,14 +215,15 @@ const Product = () => {
                     placeholder="..."
                     className="border border-teal-100 rounded"
                     value={search}
-                    onChange={e => setSearch(e.target.value)}
+                    onChange={(e) => setSearch(e.target.value)}
                   />
                 </div>
               </div>
             </div>
             <button
               onClick={handleAdd}
-              className="w-full p-1 mb-2 rounded-md border bg-teal-300 text-xs">
+              className="w-full p-1 mb-2 rounded-md border bg-teal-300 text-xs"
+            >
               add product
             </button>
             <div className="w-full rounded-md shadow-md shadow-teal-100 p-2">
@@ -238,7 +242,8 @@ const Product = () => {
                     <td>
                       <button
                         onClick={() => handleUpdate(product._id)}
-                        className="text-xs w-full italic rounded p-1 bg-green-700 text-white">
+                        className="text-xs w-full italic rounded p-1 bg-green-700 text-white"
+                      >
                         update
                       </button>
                       <button
@@ -246,14 +251,15 @@ const Product = () => {
                           dispatch(
                             setConfirmation({
                               message:
-                                'the selected data will be permanently delete ?',
+                                "the selected data will be permanently delete ?",
                               handleOke: () => handleDelete(product._id),
                               handleCancel: () =>
-                                dispatch(setConfirmation(false))
+                                dispatch(setConfirmation(false)),
                             })
                           )
                         }
-                        className="text-xs w-full italic rounded p-1 bg-red-700 text-white">
+                        className="text-xs w-full italic rounded p-1 bg-red-700 text-white"
+                      >
                         delete
                       </button>
                     </td>
@@ -276,7 +282,8 @@ const Product = () => {
             </p>
             <button
               onClick={closeModal}
-              className="absolute -right-1 -top-1 rounded bg-red-700 px-1 text-white">
+              className="absolute -right-1 -top-1 rounded bg-red-700 px-1 text-white"
+            >
               x
             </button>
             <div className="max-h-96 md:max-h-72 overflow-auto p-2 mt-1">
@@ -293,18 +300,19 @@ const Product = () => {
                   placeholder="product name"
                   className="w-full p-1 mb-1 rounded-md border"
                   value={name}
-                  onChange={e => setName(e.target.value)}
+                  onChange={(e) => setName(e.target.value)}
                 />
                 <input
                   type="text"
                   placeholder="price"
                   className="w-full p-1 mb-1 rounded-md border"
                   value={price}
-                  onChange={e => setPrice(e.target.value)}
+                  onChange={(e) => setPrice(e.target.value)}
                 />
                 <button
                   type="submit"
-                  className="w-full p-1 mb-1 rounded-md border bg-teal-300">
+                  className="w-full p-1 mb-1 rounded-md border bg-teal-300"
+                >
                   submit
                 </button>
               </form>

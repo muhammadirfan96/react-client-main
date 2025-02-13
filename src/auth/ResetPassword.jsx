@@ -1,38 +1,38 @@
-import { useState } from 'react';
-import { axiosDefault } from '../config/axios.js';
-import { useDispatch } from 'react-redux';
-import { setNotification } from '../redux/notificationSlice.js';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useState } from "react";
+import { axiosDefault } from "../config/axios.js";
+import { useDispatch } from "react-redux";
+import { setNotification } from "../redux/notificationSlice.js";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ResetPassword = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { email } = useParams();
 
-  const [resetPasswordToken, setResetPasswordToken] = useState('');
-  const [password, setPassword] = useState('');
-  const [confPassword, setConfPassword] = useState('');
+  const [resetPasswordToken, setResetPasswordToken] = useState("");
+  const [password, setPassword] = useState("");
+  const [confPassword, setConfPassword] = useState("");
   const [errForm, setErrForm] = useState(null);
 
-  const handleSubmit = async event => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       const response = await axiosDefault.patch(`/reset-password/${email}`, {
         resetPasswordToken,
         password,
-        confPassword
+        confPassword,
       });
 
       dispatch(
         setNotification({
           message: response.data.message,
-          background: 'bg-teal-100'
+          background: "bg-teal-100",
         })
       );
 
       closeModal();
     } catch (e) {
-      const arrError = e.response.data.error.split(',');
+      const arrError = e.response.data.error.split(",");
       setErrForm(arrError);
     }
   };
@@ -42,10 +42,10 @@ const ResetPassword = () => {
   const closeModal = () => {
     setShowModal(false);
     setErrForm(null);
-    setResetPasswordToken('');
-    setPassword('');
-    setConfPassword('');
-    navigate('/');
+    setResetPasswordToken("");
+    setPassword("");
+    setConfPassword("");
+    navigate("/");
   };
 
   return (
@@ -70,25 +70,26 @@ const ResetPassword = () => {
                 placeholder="token"
                 className="w-full p-1 mb-1 rounded-md border"
                 value={resetPasswordToken}
-                onChange={e => setResetPasswordToken(e.target.value)}
+                onChange={(e) => setResetPasswordToken(e.target.value)}
               />
               <input
                 type="password"
                 placeholder="password"
                 className="w-full p-1 mb-1 rounded-md border"
                 value={password}
-                onChange={e => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
               />
               <input
                 type="password"
                 placeholder="confirmation"
                 className="w-full p-1 mb-1 rounded-md border"
                 value={confPassword}
-                onChange={e => setConfPassword(e.target.value)}
+                onChange={(e) => setConfPassword(e.target.value)}
               />
               <button
                 type="submit"
-                className="w-full p-1 mb-1 rounded-md border bg-teal-300">
+                className="w-full p-1 mb-1 rounded-md border bg-teal-300"
+              >
                 submit
               </button>
             </form>

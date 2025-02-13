@@ -1,10 +1,10 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { setNotification } from '../redux/notificationSlice.js';
+import { useDispatch, useSelector } from "react-redux";
+import { setNotification } from "../redux/notificationSlice.js";
 
 const Confirmation = () => {
   const dispatch = useDispatch();
   const confirmation = useSelector(
-    state => state.confirmationAlert.confirmation
+    (state) => state.confirmationAlert.confirmation
   );
 
   return (
@@ -19,12 +19,14 @@ const Confirmation = () => {
             <div className="flex justify-center">
               <button
                 onClick={confirmation.handleCancel}
-                className="bg-red-700 text-white p-1 mx-1 rounded text-xs">
+                className="bg-red-700 text-white p-1 mx-1 rounded text-xs"
+              >
                 calcel
               </button>
               <button
                 onClick={confirmation.handleOke}
-                className="bg-green-700 text-white p-1 mx-1 rounded text-xs">
+                className="bg-green-700 text-white p-1 mx-1 rounded text-xs"
+              >
                 oke
               </button>
             </div>
@@ -38,7 +40,7 @@ const Confirmation = () => {
 const Notification = () => {
   const dispatch = useDispatch();
   const notification = useSelector(
-    state => state.notificationAlert.notification
+    (state) => state.notificationAlert.notification
   );
 
   if (notification)
@@ -50,7 +52,8 @@ const Notification = () => {
     <>
       {notification && (
         <div
-          className={`${notification.background} rounded-md shadow-md p-1 mt-1 fixed right-0.5 top-0.5 z-20`}>
+          className={`${notification.background} rounded-md shadow-md p-1 mt-1 fixed right-0.5 top-0.5 z-20`}
+        >
           <p className="text-xs text-center">{notification.message}</p>
         </div>
       )}

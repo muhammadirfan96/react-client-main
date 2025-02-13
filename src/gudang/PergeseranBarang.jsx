@@ -1,24 +1,24 @@
-import { MdCompareArrows } from 'react-icons/md';
-import { useState, useEffect } from 'react';
-import { axiosRT } from '../config/axios.js';
-import { useDispatch, useSelector } from 'react-redux';
-import { setNotification } from '../redux/notificationSlice.js';
-import { setConfirmation } from '../redux/confirmationSlice.js';
+import { MdCompareArrows } from "react-icons/md";
+import { useState, useEffect } from "react";
+import { axiosRT } from "../config/axios.js";
+import { useDispatch, useSelector } from "react-redux";
+import { setNotification } from "../redux/notificationSlice.js";
+import { setConfirmation } from "../redux/confirmationSlice.js";
 
 const PergeseranBarang = () => {
   const dispatch = useDispatch();
-  const token = useSelector(state => state.jwToken.token);
-  const expire = useSelector(state => state.jwToken.expire);
+  const token = useSelector((state) => state.jwToken.token);
+  const expire = useSelector((state) => state.jwToken.expire);
   const axiosInterceptors = axiosRT(token, expire, dispatch);
 
   // submit
-  const [jumlah, setJumlah] = useState('');
-  const [tanggal, setTanggal] = useState('');
-  const [lokasi_tujuan, setlokasi_tujuan] = useState('');
-  const [id_lokasi_penyimpanan, setid_lokasi_penyimpanan] = useState('');
+  const [jumlah, setJumlah] = useState("");
+  const [tanggal, setTanggal] = useState("");
+  const [lokasi_tujuan, setlokasi_tujuan] = useState("");
+  const [id_lokasi_penyimpanan, setid_lokasi_penyimpanan] = useState("");
   const [errForm, setErrForm] = useState(null);
 
-  const handleSubmit = async event => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       await axiosInterceptors.patch(
@@ -26,19 +26,19 @@ const PergeseranBarang = () => {
         {
           jumlah,
           tanggal,
-          lokasi_tujuan
+          lokasi_tujuan,
         }
       );
 
       dispatch(
         setNotification({
-          message: 'pergeseran barang sukses',
-          background: 'bg-teal-100'
+          message: "pergeseran barang sukses",
+          background: "bg-teal-100",
         })
       );
       closeModal();
     } catch (e) {
-      const arrError = e.response.data.error.split(',');
+      const arrError = e.response.data.error.split(",");
       setErrForm(arrError);
     }
   };
@@ -49,17 +49,17 @@ const PergeseranBarang = () => {
   const closeModal = () => {
     setShowModal(false);
     setErrForm(null);
-    setJumlah('');
-    setTanggal('');
-    setlokasi_tujuan('');
-    setid_lokasi_penyimpanan('');
+    setJumlah("");
+    setTanggal("");
+    setlokasi_tujuan("");
+    setid_lokasi_penyimpanan("");
     setInputLokasiPenyimpanan(true);
-    setNamaLokasiPenyimpanan('');
+    setNamaLokasiPenyimpanan("");
   };
 
   // option select id_lokasi_penyimpanan
   const [lokasiPenyimpanan, setLokasiPenyimpanan] = useState([]);
-  const [keyLokasiPenyimpanan, setKeyLokasiPenyimpanan] = useState('');
+  const [keyLokasiPenyimpanan, setKeyLokasiPenyimpanan] = useState("");
 
   const findLokasiPenyimpanan = async () => {
     try {
@@ -67,14 +67,14 @@ const PergeseranBarang = () => {
         `/lokasi-penyimpanan?lokasi=${keyLokasiPenyimpanan}`
       );
 
-      const addedItemPromises = response.data.data.map(async element => {
+      const addedItemPromises = response.data.data.map(async (element) => {
         const [namaRes] = await Promise.all([
           axiosInterceptors.get(
             `/inventori-barang/${element.id_inventaris_barang}`
-          )
+          ),
         ]);
         return {
-          nama: namaRes.data.nama
+          nama: namaRes.data.nama,
         };
       });
 
@@ -82,14 +82,14 @@ const PergeseranBarang = () => {
 
       const result = response.data.data.map((item, index) => ({
         ...item,
-        nama: addedItem[index].nama
+        nama: addedItem[index].nama,
       }));
 
       setLokasiPenyimpanan(result);
     } catch (e) {
-      const arrError = e.response.data.error.split(',');
+      const arrError = e.response.data.error.split(",");
       dispatch(
-        setNotification({ message: arrError, background: 'bg-red-100' })
+        setNotification({ message: arrError, background: "bg-red-100" })
       );
     }
   };
@@ -100,20 +100,21 @@ const PergeseranBarang = () => {
 
   //  input id_lokasi_penyimpanan
   const [inputLokasiPenyimpanan, setInputLokasiPenyimpanan] = useState(true);
-  const [namaLokasiPenyimpanan, setNamaLokasiPenyimpanan] = useState('');
+  const [namaLokasiPenyimpanan, setNamaLokasiPenyimpanan] = useState("");
 
-  const handleChangeOptionSelectLokasi = event => {
+  const handleChangeOptionSelectLokasi = (event) => {
     const selected = event.target[event.target.selectedIndex];
     setid_lokasi_penyimpanan(selected.value);
     setInputLokasiPenyimpanan(true);
-    setNamaLokasiPenyimpanan(selected.getAttribute('data-additional-info'));
+    setNamaLokasiPenyimpanan(selected.getAttribute("data-additional-info"));
   };
 
   return (
     <>
       <button
         onClick={openModal}
-        className="w-[95%] md:w-[45%] aspect-video rounded shadow bg-teal-700 m-2 p-2 ">
+        className="w-[95%] md:w-[45%] aspect-video rounded shadow bg-teal-700 m-2 p-2 "
+      >
         <p className="text-white text-center border-b border-white">
           pergeseran barang
         </p>
@@ -129,7 +130,8 @@ const PergeseranBarang = () => {
             </p>
             <button
               onClick={closeModal}
-              className="absolute -right-1 -top-1 rounded bg-red-700 px-1 text-white">
+              className="absolute -right-1 -top-1 rounded bg-red-700 px-1 text-white"
+            >
               x
             </button>
             <div className="max-h-96 md:max-h-72 overflow-auto p-2 mt-1">
@@ -145,7 +147,8 @@ const PergeseranBarang = () => {
                   <button
                     type="button"
                     className="w-full p-1 mb-1 rounded-md border text-start"
-                    onClick={() => setInputLokasiPenyimpanan(false)}>
+                    onClick={() => setInputLokasiPenyimpanan(false)}
+                  >
                     {namaLokasiPenyimpanan ? (
                       namaLokasiPenyimpanan
                     ) : (
@@ -157,18 +160,20 @@ const PergeseranBarang = () => {
                     <select
                       value={id_lokasi_penyimpanan}
                       onChange={handleChangeOptionSelectLokasi}
-                      className="w-[50%] p-1 mb-1 rounded-md rounded-r-none border">
+                      className="w-[50%] p-1 mb-1 rounded-md rounded-r-none border"
+                    >
                       <option selected value="">
                         list barang...
                       </option>
-                      {lokasiPenyimpanan.map(each => (
+                      {lokasiPenyimpanan.map((each) => (
                         <option
                           value={each._id}
-                          data-additional-info={each.nama}>
+                          data-additional-info={each.nama}
+                        >
                           {each.nama +
-                            ' | ' +
+                            " | " +
                             each.lokasi +
-                            ' | ' +
+                            " | " +
                             each.jumlah}
                         </option>
                       ))}
@@ -178,7 +183,7 @@ const PergeseranBarang = () => {
                       placeholder="search_lokasi"
                       className="w-[50%] p-1 mb-1 rounded-md rounded-l-none border"
                       value={keyLokasiPenyimpanan}
-                      onChange={e => setKeyLokasiPenyimpanan(e.target.value)}
+                      onChange={(e) => setKeyLokasiPenyimpanan(e.target.value)}
                     />
                   </div>
                 )}
@@ -187,25 +192,26 @@ const PergeseranBarang = () => {
                   placeholder="jumlah"
                   className="w-full p-1 mb-1 rounded-md border"
                   value={jumlah}
-                  onChange={e => setJumlah(e.target.value)}
+                  onChange={(e) => setJumlah(e.target.value)}
                 />
                 <input
                   type="datetime-local"
                   placeholder="tanggal"
                   className="w-full p-1 mb-1 rounded-md border"
                   value={tanggal}
-                  onChange={e => setTanggal(e.target.value)}
+                  onChange={(e) => setTanggal(e.target.value)}
                 />
                 <input
                   type="text"
                   placeholder="lokasi_tujuan"
                   className="w-full p-1 mb-1 rounded-md border"
                   value={lokasi_tujuan}
-                  onChange={e => setlokasi_tujuan(e.target.value)}
+                  onChange={(e) => setlokasi_tujuan(e.target.value)}
                 />
                 <button
                   type="submit"
-                  className="w-full p-1 mb-1 rounded-md border bg-teal-300">
+                  className="w-full p-1 mb-1 rounded-md border bg-teal-300"
+                >
                   submit
                 </button>
               </form>

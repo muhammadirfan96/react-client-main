@@ -1,34 +1,34 @@
-import { useState, useEffect } from 'react';
-import { axiosRT } from '../config/axios.js';
-import { useDispatch, useSelector } from 'react-redux';
-import { setNotification } from '../redux/notificationSlice.js';
-import { setConfirmation } from '../redux/confirmationSlice.js';
-import { HiMiniMagnifyingGlass } from 'react-icons/hi2';
+import { useState, useEffect } from "react";
+import { axiosRT } from "../config/axios.js";
+import { useDispatch, useSelector } from "react-redux";
+import { setNotification } from "../redux/notificationSlice.js";
+import { setConfirmation } from "../redux/confirmationSlice.js";
+import { HiMiniMagnifyingGlass } from "react-icons/hi2";
 
 const Pemasok = () => {
   const dispatch = useDispatch();
 
-  const token = useSelector(state => state.jwToken.token);
-  const expire = useSelector(state => state.jwToken.expire);
+  const token = useSelector((state) => state.jwToken.token);
+  const expire = useSelector((state) => state.jwToken.expire);
 
   const axiosInterceptors = axiosRT(token, expire, dispatch);
 
   // submit
-  const [nama, setNama] = useState('');
-  const [alamat, setAlamat] = useState('');
-  const [kontak, setKontak] = useState('');
+  const [nama, setNama] = useState("");
+  const [alamat, setAlamat] = useState("");
+  const [kontak, setKontak] = useState("");
   const [errForm, setErrForm] = useState(null);
   const [form, setForm] = useState(null);
 
   const handleAdd = () => {
     setForm(null);
-    setNamaModal('add pemasok');
+    setNamaModal("add pemasok");
     openModal();
   };
 
-  const handleUpdate = async id => {
+  const handleUpdate = async (id) => {
     setForm({ id: id });
-    setNamaModal('update pemasok');
+    setNamaModal("update pemasok");
     const oldData = await axiosInterceptors.get(`/pemasok/${id}`);
     openModal();
     setNama(oldData.data?.nama);
@@ -36,12 +36,12 @@ const Pemasok = () => {
     setKontak(oldData.data?.kontak);
   };
 
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     form ? updateData(form.id) : addData();
   };
 
-  const handleDelete = id => {
+  const handleDelete = (id) => {
     deleteData(id);
     dispatch(setConfirmation(false));
   };
@@ -51,54 +51,54 @@ const Pemasok = () => {
       await axiosInterceptors.post(`/pemasok`, { nama, alamat, kontak });
       dispatch(
         setNotification({
-          message: 'new data has been added',
-          background: 'bg-teal-100'
+          message: "new data has been added",
+          background: "bg-teal-100",
         })
       );
       closeModal();
       findPemasok();
     } catch (e) {
-      const arrError = e.response.data.error.split(',');
+      const arrError = e.response.data.error.split(",");
       setErrForm(arrError);
     }
   };
 
-  const updateData = async id => {
+  const updateData = async (id) => {
     try {
       await axiosInterceptors.patch(`/pemasok/${id}`, {
         nama,
         alamat,
-        kontak
+        kontak,
       });
 
       dispatch(
         setNotification({
-          message: 'selected data has been updated',
-          background: 'bg-teal-100'
+          message: "selected data has been updated",
+          background: "bg-teal-100",
         })
       );
       closeModal();
       findPemasok();
     } catch (e) {
-      const arrError = e.response.data.error.split(',');
+      const arrError = e.response.data.error.split(",");
       setErrForm(arrError);
     }
   };
 
-  const deleteData = async id => {
+  const deleteData = async (id) => {
     try {
       await axiosInterceptors.delete(`/pemasok/${id}`);
       dispatch(
         setNotification({
-          message: 'selected data has been deleted',
-          background: 'bg-teal-100'
+          message: "selected data has been deleted",
+          background: "bg-teal-100",
         })
       );
       findPemasok();
     } catch (e) {
-      const arrError = e.response.data.error.split(',');
+      const arrError = e.response.data.error.split(",");
       dispatch(
-        setNotification({ message: arrError, background: 'bg-red-100' })
+        setNotification({ message: arrError, background: "bg-red-100" })
       );
     }
   };
@@ -109,9 +109,9 @@ const Pemasok = () => {
 
   const [limit, setLimit] = useState(4);
   const [page, setPage] = useState(1);
-  const [key, setKey] = useState('');
-  const [search, setSearch] = useState('');
-  const [searchBased, setSearchBased] = useState('nama');
+  const [key, setKey] = useState("");
+  const [search, setSearch] = useState("");
+  const [searchBased, setSearchBased] = useState("nama");
 
   const findPemasok = async () => {
     try {
@@ -119,14 +119,14 @@ const Pemasok = () => {
         `/pemasok?limit=${limit}&page=${page}&${key}`
       );
 
-      const addedItemPromises = response.data.data.map(async element => {
+      const addedItemPromises = response.data.data.map(async (element) => {
         const [createdByRes, updatedByRes] = await Promise.all([
           axiosInterceptors.get(`/user/${element.createdBy}`),
-          axiosInterceptors.get(`/user/${element.updatedBy}`)
+          axiosInterceptors.get(`/user/${element.updatedBy}`),
         ]);
         return {
           createdBy: createdByRes.data.email,
-          updatedBy: updatedByRes.data.email
+          updatedBy: updatedByRes.data.email,
         };
       });
 
@@ -135,15 +135,15 @@ const Pemasok = () => {
       const result = response.data.data.map((item, index) => ({
         ...item,
         created_by: addedItem[index].createdBy,
-        updated_by: addedItem[index].updatedBy
+        updated_by: addedItem[index].updatedBy,
       }));
 
       setPemasok(result);
       setAllPage(response.data.all_page);
     } catch (e) {
-      const arrError = e.response.data.error.split(',');
+      const arrError = e.response.data.error.split(",");
       dispatch(
-        setNotification({ message: arrError, background: 'bg-red-100' })
+        setNotification({ message: arrError, background: "bg-red-100" })
       );
     }
   };
@@ -154,23 +154,24 @@ const Pemasok = () => {
       <button
         onClick={() => setPage(i)}
         className={`${
-          i == page ? 'bg-teal-300' : ''
-        } text-xs px-1 mx-1 rounded border border-teal-100`}>
+          i == page ? "bg-teal-300" : ""
+        } text-xs px-1 mx-1 rounded border border-teal-100`}
+      >
         {i}
       </button>
     );
   }
 
   // modal
-  const [namaModal, setNamaModal] = useState('');
+  const [namaModal, setNamaModal] = useState("");
   const [showModal, setShowModal] = useState(false);
   const openModal = () => setShowModal(true);
   const closeModal = () => {
     setShowModal(false);
     setErrForm(null);
-    setNama('');
-    setAlamat('');
-    setKontak('');
+    setNama("");
+    setAlamat("");
+    setKontak("");
   };
 
   useEffect(() => {
@@ -194,25 +195,25 @@ const Pemasok = () => {
                 <input
                   type="button"
                   value="4"
-                  onClick={e => setLimit(e.target.value)}
+                  onClick={(e) => setLimit(e.target.value)}
                   className={`${
-                    limit == 4 ? 'bg-teal-300' : ''
+                    limit == 4 ? "bg-teal-300" : ""
                   } text-xs px-2 mx-1 rounded border border-teal-100`}
                 />
                 <input
                   type="button"
                   value="6"
-                  onClick={e => setLimit(e.target.value)}
+                  onClick={(e) => setLimit(e.target.value)}
                   className={`${
-                    limit == 6 ? 'bg-teal-300' : ''
+                    limit == 6 ? "bg-teal-300" : ""
                   } text-xs px-2 mx-1 rounded border border-teal-100`}
                 />
                 <input
                   type="button"
                   value="8"
-                  onClick={e => setLimit(e.target.value)}
+                  onClick={(e) => setLimit(e.target.value)}
                   className={`${
-                    limit == 8 ? 'bg-teal-300' : ''
+                    limit == 8 ? "bg-teal-300" : ""
                   } text-xs px-2 mx-1 rounded border border-teal-100`}
                 />
               </div>
@@ -225,14 +226,16 @@ const Pemasok = () => {
               <p className="text-xs border-b border-teal-300">
                 <select
                   value={searchBased}
-                  onChange={e => setSearchBased(e.target.value)}>
+                  onChange={(e) => setSearchBased(e.target.value)}
+                >
                   <option selected>nama</option>
                   <option>alamat</option>
                   <option>kontak</option>
                 </select>
                 <button
                   onClick={() => setKey(`${searchBased}=${search}`)}
-                  className="text-xs text-white italic bg-green-700 p-1 ml-1 rounded">
+                  className="text-xs text-white italic bg-green-700 p-1 ml-1 rounded"
+                >
                   <HiMiniMagnifyingGlass />
                 </button>
               </p>
@@ -243,7 +246,7 @@ const Pemasok = () => {
                   placeholder="..."
                   className="border border-teal-100 rounded"
                   value={search}
-                  onChange={e => setSearch(e.target.value)}
+                  onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
             </div>
@@ -251,7 +254,8 @@ const Pemasok = () => {
           {/*btn add*/}
           <button
             onClick={handleAdd}
-            className="w-full p-1 mb-2 rounded-md border bg-teal-300 text-xs">
+            className="w-full p-1 mb-2 rounded-md border bg-teal-300 text-xs"
+          >
             add data
           </button>
 
@@ -268,7 +272,7 @@ const Pemasok = () => {
                 <th className="px-2">updated_at</th>
                 <th className="px-2">action</th>
               </tr>
-              {pemasok.map(each => (
+              {pemasok.map((each) => (
                 <tr key={each._id} className="border-b border-teal-300">
                   <td className="px-2">{each.nama}</td>
                   <td className="px-2">{each.alamat}</td>
@@ -280,7 +284,8 @@ const Pemasok = () => {
                   <td className="px-2">
                     <button
                       onClick={() => handleUpdate(each._id)}
-                      className="text-xs w-full italic rounded p-1 bg-green-700 text-white">
+                      className="text-xs w-full italic rounded p-1 bg-green-700 text-white"
+                    >
                       update
                     </button>
                     <button
@@ -288,13 +293,15 @@ const Pemasok = () => {
                         dispatch(
                           setConfirmation({
                             message:
-                              'the selected data will be permanently delete ?',
+                              "the selected data will be permanently delete ?",
                             handleOke: () => handleDelete(each._id),
-                            handleCancel: () => dispatch(setConfirmation(false))
+                            handleCancel: () =>
+                              dispatch(setConfirmation(false)),
                           })
                         )
                       }
-                      className="text-xs w-full italic rounded p-1 bg-red-700 text-white">
+                      className="text-xs w-full italic rounded p-1 bg-red-700 text-white"
+                    >
                       delete
                     </button>
                   </td>
@@ -314,7 +321,8 @@ const Pemasok = () => {
             </p>
             <button
               onClick={closeModal}
-              className="absolute -right-1 -top-1 rounded bg-red-700 px-1 text-white">
+              className="absolute -right-1 -top-1 rounded bg-red-700 px-1 text-white"
+            >
               x
             </button>
             <div className="max-h-96 md:max-h-72 overflow-auto p-2 mt-1">
@@ -331,25 +339,26 @@ const Pemasok = () => {
                   placeholder="nama"
                   className="w-full p-1 mb-1 rounded-md border"
                   value={nama}
-                  onChange={e => setNama(e.target.value)}
+                  onChange={(e) => setNama(e.target.value)}
                 />
                 <input
                   type="text"
                   placeholder="alamat"
                   className="w-full p-1 mb-1 rounded-md border"
                   value={alamat}
-                  onChange={e => setAlamat(e.target.value)}
+                  onChange={(e) => setAlamat(e.target.value)}
                 />
                 <input
                   type="text"
                   placeholder="kontak"
                   className="w-full p-1 mb-1 rounded-md border"
                   value={kontak}
-                  onChange={e => setKontak(e.target.value)}
+                  onChange={(e) => setKontak(e.target.value)}
                 />
                 <button
                   type="submit"
-                  className="w-full p-1 mb-1 rounded-md border bg-teal-300">
+                  className="w-full p-1 mb-1 rounded-md border bg-teal-300"
+                >
                   submit
                 </button>
               </form>

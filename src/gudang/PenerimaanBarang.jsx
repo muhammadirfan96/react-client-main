@@ -1,26 +1,26 @@
-import { MdCompareArrows } from 'react-icons/md';
-import { useState, useEffect } from 'react';
-import { axiosRT } from '../config/axios.js';
-import { useDispatch, useSelector } from 'react-redux';
-import { setNotification } from '../redux/notificationSlice.js';
-import { setConfirmation } from '../redux/confirmationSlice.js';
+import { MdCompareArrows } from "react-icons/md";
+import { useState, useEffect } from "react";
+import { axiosRT } from "../config/axios.js";
+import { useDispatch, useSelector } from "react-redux";
+import { setNotification } from "../redux/notificationSlice.js";
+import { setConfirmation } from "../redux/confirmationSlice.js";
 
 const PenerimaanBarang = () => {
   const dispatch = useDispatch();
-  const token = useSelector(state => state.jwToken.token);
-  const expire = useSelector(state => state.jwToken.expire);
+  const token = useSelector((state) => state.jwToken.token);
+  const expire = useSelector((state) => state.jwToken.expire);
   const axiosInterceptors = axiosRT(token, expire, dispatch);
 
   // submit
-  const [nama, setNama] = useState('');
-  const [jumlah, setJumlah] = useState('');
-  const [jenis, setJenis] = useState('');
-  const [tanggal, setTanggal] = useState('');
-  const [id_pemasok, setid_pemasok] = useState('');
-  const [lokasi_penyimpanan, setlokasi_penyimpanan] = useState('');
+  const [nama, setNama] = useState("");
+  const [jumlah, setJumlah] = useState("");
+  const [jenis, setJenis] = useState("");
+  const [tanggal, setTanggal] = useState("");
+  const [id_pemasok, setid_pemasok] = useState("");
+  const [lokasi_penyimpanan, setlokasi_penyimpanan] = useState("");
   const [errForm, setErrForm] = useState(null);
 
-  const handleSubmit = async event => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       await axiosInterceptors.post(`/penerimaan-barang`, {
@@ -29,18 +29,18 @@ const PenerimaanBarang = () => {
         jenis,
         tanggal,
         id_pemasok,
-        lokasi_penyimpanan
+        lokasi_penyimpanan,
       });
 
       dispatch(
         setNotification({
-          message: 'barang ditambahkan ke daftar inventori',
-          background: 'bg-teal-100'
+          message: "barang ditambahkan ke daftar inventori",
+          background: "bg-teal-100",
         })
       );
       closeModal();
     } catch (e) {
-      const arrError = e.response.data.error.split(',');
+      const arrError = e.response.data.error.split(",");
       setErrForm(arrError);
     }
   };
@@ -51,19 +51,19 @@ const PenerimaanBarang = () => {
   const closeModal = () => {
     setShowModal(false);
     setErrForm(null);
-    setNama('');
-    setJumlah('');
-    setJenis('');
-    setTanggal('');
-    setlokasi_penyimpanan('');
-    setid_pemasok('');
+    setNama("");
+    setJumlah("");
+    setJenis("");
+    setTanggal("");
+    setlokasi_penyimpanan("");
+    setid_pemasok("");
     setInputPemasok(true);
-    setNamaPemasok('');
+    setNamaPemasok("");
   };
 
   // option select id_pemasok
   const [pemasok, setPemasok] = useState([]);
-  const [keyPemasok, setKeyPemasok] = useState('');
+  const [keyPemasok, setKeyPemasok] = useState("");
 
   const findPemasok = async () => {
     try {
@@ -72,9 +72,9 @@ const PenerimaanBarang = () => {
       );
       setPemasok(response.data.data);
     } catch (e) {
-      const arrError = e.response.data.error.split(',');
+      const arrError = e.response.data.error.split(",");
       dispatch(
-        setNotification({ message: arrError, background: 'bg-red-100' })
+        setNotification({ message: arrError, background: "bg-red-100" })
       );
     }
   };
@@ -85,20 +85,21 @@ const PenerimaanBarang = () => {
 
   //  input id_pemasok
   const [inputPemasok, setInputPemasok] = useState(true);
-  const [namaPemasok, setNamaPemasok] = useState('');
+  const [namaPemasok, setNamaPemasok] = useState("");
 
-  const handleChangeOptionSelectPemasok = event => {
+  const handleChangeOptionSelectPemasok = (event) => {
     const selected = event.target[event.target.selectedIndex];
     setid_pemasok(selected.value);
     setInputPemasok(true);
-    setNamaPemasok(selected.getAttribute('data-additional-info'));
+    setNamaPemasok(selected.getAttribute("data-additional-info"));
   };
 
   return (
     <>
       <button
         onClick={openModal}
-        className="w-[95%] md:w-[45%] aspect-video rounded shadow bg-teal-700 m-2 p-2 ">
+        className="w-[95%] md:w-[45%] aspect-video rounded shadow bg-teal-700 m-2 p-2 "
+      >
         <p className="text-white text-center border-b border-white">
           penerimaan barang
         </p>
@@ -114,7 +115,8 @@ const PenerimaanBarang = () => {
             </p>
             <button
               onClick={closeModal}
-              className="absolute -right-1 -top-1 rounded bg-red-700 px-1 text-white">
+              className="absolute -right-1 -top-1 rounded bg-red-700 px-1 text-white"
+            >
               x
             </button>
             <div className="max-h-96 md:max-h-72 overflow-auto p-2 mt-1">
@@ -131,41 +133,42 @@ const PenerimaanBarang = () => {
                   placeholder="nama"
                   className="w-full p-1 mb-1 rounded-md border"
                   value={nama}
-                  onChange={e => setNama(e.target.value)}
+                  onChange={(e) => setNama(e.target.value)}
                 />
                 <input
                   type="text"
                   placeholder="jumlah"
                   className="w-full p-1 mb-1 rounded-md border"
                   value={jumlah}
-                  onChange={e => setJumlah(e.target.value)}
+                  onChange={(e) => setJumlah(e.target.value)}
                 />
                 <input
                   type="text"
                   placeholder="jenis"
                   className="w-full p-1 mb-1 rounded-md border"
                   value={jenis}
-                  onChange={e => setJenis(e.target.value)}
+                  onChange={(e) => setJenis(e.target.value)}
                 />
                 <input
                   type="datetime-local"
                   placeholder="tanggal"
                   className="w-full p-1 mb-1 rounded-md border"
                   value={tanggal}
-                  onChange={e => setTanggal(e.target.value)}
+                  onChange={(e) => setTanggal(e.target.value)}
                 />
                 <input
                   type="text"
                   placeholder="lokasi_penyimpanan"
                   className="w-full p-1 mb-1 rounded-md border"
                   value={lokasi_penyimpanan}
-                  onChange={e => setlokasi_penyimpanan(e.target.value)}
+                  onChange={(e) => setlokasi_penyimpanan(e.target.value)}
                 />
-               {inputPemasok ? (
+                {inputPemasok ? (
                   <button
                     type="button"
                     className="w-full p-1 mb-1 rounded-md border text-start"
-                    onClick={() => setInputPemasok(false)}>
+                    onClick={() => setInputPemasok(false)}
+                  >
                     {namaPemasok ? (
                       namaPemasok
                     ) : (
@@ -177,14 +180,16 @@ const PenerimaanBarang = () => {
                     <select
                       value={id_pemasok}
                       onChange={handleChangeOptionSelectPemasok}
-                      className="w-[50%] p-1 mb-1 rounded-md rounded-r-none border">
+                      className="w-[50%] p-1 mb-1 rounded-md rounded-r-none border"
+                    >
                       <option selected value="">
                         list pemasok...
                       </option>
-                      {pemasok.map(each => (
+                      {pemasok.map((each) => (
                         <option
                           value={each._id}
-                          data-additional-info={each.nama}>
+                          data-additional-info={each.nama}
+                        >
                           {each.nama}
                         </option>
                       ))}
@@ -194,13 +199,14 @@ const PenerimaanBarang = () => {
                       placeholder="search_inventori"
                       className="w-[50%] p-1 mb-1 rounded-md rounded-l-none border"
                       value={keyPemasok}
-                      onChange={e => setKeyPemasok(e.target.value)}
+                      onChange={(e) => setKeyPemasok(e.target.value)}
                     />
                   </div>
                 )}
                 <button
                   type="submit"
-                  className="w-full p-1 mb-1 rounded-md border bg-teal-300">
+                  className="w-full p-1 mb-1 rounded-md border bg-teal-300"
+                >
                   submit
                 </button>
               </form>

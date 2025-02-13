@@ -1,15 +1,15 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const notificationSlice = createSlice({
-  name: 'notificationAlert',
+  name: "notificationAlert",
   initialState: {
-    notification: false
+    notification: false,
   },
   reducers: {
     setNotification(state, action) {
       state.notification = action.payload;
-    }
-  }
+    },
+  },
 });
 
 export const { setNotification } = notificationSlice.actions;

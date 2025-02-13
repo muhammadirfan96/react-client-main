@@ -1,75 +1,77 @@
-import { BsSpeedometer, BsBasket, BsCaretRight } from 'react-icons/bs';
-import { AiOutlineShopping, AiOutlineStock } from 'react-icons/ai';
-import { FaUserFriends } from 'react-icons/fa';
-import { IoReceiptOutline, IoPeopleOutline } from 'react-icons/io5';
-import { IoIosPaperPlane } from 'react-icons/io';
-import { MdCompareArrows, MdOutlineStorage } from 'react-icons/md';
-import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { BsSpeedometer, BsBasket, BsCaretRight } from "react-icons/bs";
+import { AiOutlineShopping, AiOutlineStock } from "react-icons/ai";
+import { FaUserFriends } from "react-icons/fa";
+import { IoReceiptOutline, IoPeopleOutline } from "react-icons/io5";
+import { IoIosPaperPlane } from "react-icons/io";
+import { MdCompareArrows, MdOutlineStorage } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Sidebar = () => {
   const navigate = useNavigate();
-  const sbar = useSelector(state => state.bar.sidebar);
+  const sbar = useSelector((state) => state.bar.sidebar);
 
   const menu = [
     {
-      path: 'gudang-controller',
+      path: "gudang-controller",
       icon: <BsSpeedometer />,
-      name: 'manage'
+      name: "manage",
     },
     {
-      path: 'inventori-barang',
+      path: "inventori-barang",
       icon: <AiOutlineShopping />,
-      name: 'inventori'
+      name: "inventori",
     },
     {
-      path: 'lokasi-penyimpanan',
+      path: "lokasi-penyimpanan",
       icon: <MdOutlineStorage />,
-      name: 'lokasi'
+      name: "lokasi",
     },
     {
-      path: 'penerimaan-barang',
+      path: "penerimaan-barang",
       icon: <IoReceiptOutline />,
-      name: 'penerimaan'
+      name: "penerimaan",
     },
     {
-      path: 'pengiriman-barang',
+      path: "pengiriman-barang",
       icon: <IoIosPaperPlane />,
-      name: 'pengiriman'
+      name: "pengiriman",
     },
     {
-      path: 'pergeseran-barang',
+      path: "pergeseran-barang",
       icon: <MdCompareArrows />,
-      name: 'pergeseran'
+      name: "pergeseran",
     },
     {
-      path: 'stok-barang',
+      path: "stok-barang",
       icon: <AiOutlineStock />,
-      name: 'stok'
+      name: "stok",
     },
     {
-      path: 'pemasok',
+      path: "pemasok",
       icon: <IoPeopleOutline />,
-      name: 'pemasok'
+      name: "pemasok",
     },
     {
-      path: 'pelanggan',
+      path: "pelanggan",
       icon: <FaUserFriends />,
-      name: 'pelanggan'
-    }
+      name: "pelanggan",
+    },
   ];
 
   return (
     <>
       <div
         className={`${
-          !sbar && '-ml-52'
-        } overflow-auto hidden md:block bg-teal-300 border-teal-700 border-r-2 fixed left-0 top-[64px] bottom-0 w-52 p-4 transition-all`}>
+          !sbar && "-ml-52"
+        } overflow-auto hidden md:block bg-teal-300 border-teal-700 border-r-2 fixed left-0 top-[64px] bottom-0 w-52 p-4 transition-all`}
+      >
         <div className="flex flex-col">
-          {menu.map(each => (
+          {menu.map((each) => (
             <button
               onClick={() => navigate(`/${each.path}`)}
-              className="bg-teal-700 py-1 px-2 m-1 rounded shadow text-start text-white relative">
+              className="bg-teal-700 py-1 px-2 m-1 rounded shadow text-start text-white relative"
+            >
               <div className="inline-block mr-2">{each.icon}</div>
               {each.name}
               <BsCaretRight className="absolute right-1 top-2" />
@@ -77,8 +79,9 @@ const Sidebar = () => {
           ))}
 
           <button
-            onClick={() => navigate('/product')}
-            className="bg-teal-700 py-1 px-2 m-1 rounded shadow text-start text-white relative">
+            onClick={() => navigate("/product")}
+            className="bg-teal-700 py-1 px-2 m-1 rounded shadow text-start text-white relative"
+          >
             <BsBasket className="inline mr-2" />
             product
             <BsCaretRight className="absolute right-1 top-2" />

@@ -1,37 +1,37 @@
-import { useState } from 'react';
-import { axiosDefault } from '../config/axios.js';
-import { useDispatch } from 'react-redux';
-import { setNotification } from '../redux/notificationSlice.js';
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { axiosDefault } from "../config/axios.js";
+import { useDispatch } from "react-redux";
+import { setNotification } from "../redux/notificationSlice.js";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confPassword, setConfPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confPassword, setConfPassword] = useState("");
   const [errForm, setErrForm] = useState(null);
 
-  const handleSubmit = async event => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axiosDefault.post('/register', {
+      const response = await axiosDefault.post("/register", {
         email,
         password,
-        confPassword
+        confPassword,
       });
       dispatch(
         setNotification({
           message: response.data?.message,
-          background: 'bg-teal-100'
+          background: "bg-teal-100",
         })
       );
 
       closeModal();
       navigate(`/activation-user/${email}`);
     } catch (e) {
-      const arrError = e.response.data.error.split(',');
+      const arrError = e.response.data.error.split(",");
       setErrForm(arrError);
     }
   };
@@ -41,10 +41,10 @@ const Register = () => {
   const closeModal = () => {
     setShowModal(false);
     setErrForm(null);
-    setEmail('');
-    setPassword('');
-    setConfPassword('');
-    navigate('/');
+    setEmail("");
+    setPassword("");
+    setConfPassword("");
+    navigate("/");
   };
 
   return (
@@ -57,7 +57,8 @@ const Register = () => {
             </p>
             <button
               onClick={closeModal}
-              className="absolute -right-1 -top-1 rounded bg-red-700 px-1 text-white">
+              className="absolute -right-1 -top-1 rounded bg-red-700 px-1 text-white"
+            >
               x
             </button>
             {errForm && (
@@ -73,33 +74,32 @@ const Register = () => {
                 placeholder="email"
                 className="w-full p-1 mb-1 rounded-md border"
                 value={email}
-                onChange={e => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
               />
               <input
                 type="password"
                 placeholder="password"
                 className="w-full p-1 mb-1 rounded-md border"
                 value={password}
-                onChange={e => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
               />
               <input
                 type="password"
                 placeholder="confirmation"
                 className="w-full p-1 mb-1 rounded-md border"
                 value={confPassword}
-                onChange={e => setConfPassword(e.target.value)}
+                onChange={(e) => setConfPassword(e.target.value)}
               />
               <button
                 type="submit"
-                className="w-full p-1 mb-1 rounded-md border bg-teal-300">
+                className="w-full p-1 mb-1 rounded-md border bg-teal-300"
+              >
                 submit
               </button>
             </form>
           </div>
         </div>
       )}
-
-  
     </>
   );
 };

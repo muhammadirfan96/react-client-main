@@ -1,23 +1,23 @@
-import { useState } from 'react';
-import { axiosDefault } from '../config/axios.js';
-import { useDispatch } from 'react-redux';
-import { setToken, setExpire, setUsername } from '../redux/tokenSlice.js';
-import { setNotification } from '../redux/notificationSlice.js';
-import { jwtDecode } from 'jwt-decode';
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { axiosDefault } from "../config/axios.js";
+import { useDispatch } from "react-redux";
+import { setToken, setExpire, setUsername } from "../redux/tokenSlice.js";
+import { setNotification } from "../redux/notificationSlice.js";
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [errForm, setErrForm] = useState(null);
 
-  const handleSubmit = async event => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axiosDefault.post('/login', { email, password });
+      const response = await axiosDefault.post("/login", { email, password });
 
       const decoded = jwtDecode(response.data);
       dispatch(setToken(response.data));
@@ -25,27 +25,27 @@ const Login = () => {
       dispatch(setUsername(decoded.email));
       dispatch(
         setNotification({
-          message: 'logged in',
-          background: 'bg-teal-100'
+          message: "logged in",
+          background: "bg-teal-100",
         })
       );
       closeModal();
-      navigate('/');
+      navigate("/");
     } catch (e) {
-      const arrError = e.response.data.error.split(',');
+      const arrError = e.response.data.error.split(",");
       setErrForm(arrError);
     }
   };
 
   const closeModal = () => {
     setErrForm(null);
-    setEmail('');
-    setPassword('');
+    setEmail("");
+    setPassword("");
   };
 
   const back = () => {
     closeModal();
-    navigate('/');
+    navigate("/");
   };
 
   return (
@@ -55,7 +55,8 @@ const Login = () => {
           <p className="text-center border-b border-teal-700 mb-2">Login</p>
           <button
             onClick={back}
-            className="absolute -right-1 -top-1 rounded bg-red-700 px-1 text-white">
+            className="absolute -right-1 -top-1 rounded bg-red-700 px-1 text-white"
+          >
             x
           </button>
           {errForm && (
@@ -71,24 +72,26 @@ const Login = () => {
               placeholder="email"
               className="w-full p-1 mb-1 rounded-md border"
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <input
               type="password"
               placeholder="password"
               className="w-full p-1 mb-1 rounded-md border"
               value={password}
-              onChange={e => setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <button
               type="submit"
-              className="w-full p-1 mb-1 rounded-md border bg-teal-300">
+              className="w-full p-1 mb-1 rounded-md border bg-teal-300"
+            >
               submit
             </button>
           </form>
           <button
-            onClick={() => navigate('/forgot-password')}
-            className="text-xs bg-orange-500 text-white p-0.5 rounded">
+            onClick={() => navigate("/forgot-password")}
+            className="text-xs bg-orange-500 text-white p-0.5 rounded"
+          >
             Forgot password
           </button>
         </div>

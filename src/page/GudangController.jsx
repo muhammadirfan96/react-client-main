@@ -1,15 +1,15 @@
-import { IoReceiptOutline } from 'react-icons/io5';
-import { IoIosPaperPlane } from 'react-icons/io';
-import { MdCompareArrows } from 'react-icons/md';
-import { AiOutlinePlusCircle } from 'react-icons/ai';
-import PenambahanBarang from '../gudang/PenambahanBarang.jsx';
-import PenerimaanBarang from '../gudang/PenerimaanBarang.jsx';
-import PengirimanBarang from '../gudang/PengirimanBarang.jsx';
-import PergeseranBarang from '../gudang/PergeseranBarang.jsx';
-import { useSelector } from 'react-redux';
+import { IoReceiptOutline } from "react-icons/io5";
+import { IoIosPaperPlane } from "react-icons/io";
+import { MdCompareArrows } from "react-icons/md";
+import { AiOutlinePlusCircle } from "react-icons/ai";
+import PenambahanBarang from "../gudang/PenambahanBarang.jsx";
+import PenerimaanBarang from "../gudang/PenerimaanBarang.jsx";
+import PengirimanBarang from "../gudang/PengirimanBarang.jsx";
+import PergeseranBarang from "../gudang/PergeseranBarang.jsx";
+import { useSelector } from "react-redux";
 
 const GudangController = () => {
-  const token = useSelector(state => state.jwToken.token);
+  const token = useSelector((state) => state.jwToken.token);
   return token ? (
     <>
       <div className="flex flex-wrap gap-2 justify-evenly mt-2">
@@ -22,9 +22,7 @@ const GudangController = () => {
             <PenambahanBarang />
             <PenerimaanBarang />
             <PengirimanBarang />
-            <PergeseranBarang/>
-
-            
+            <PergeseranBarang />
           </div>
         </div>
       </div>

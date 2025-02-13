@@ -1,34 +1,34 @@
-import { useState } from 'react';
-import { axiosDefault } from '../config/axios.js';
-import { useDispatch } from 'react-redux';
-import { setNotification } from '../redux/notificationSlice.js';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useState } from "react";
+import { axiosDefault } from "../config/axios.js";
+import { useDispatch } from "react-redux";
+import { setNotification } from "../redux/notificationSlice.js";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ActivationUser = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { email } = useParams();
 
-  const [activationToken, setActivationToken] = useState('');
+  const [activationToken, setActivationToken] = useState("");
   const [errForm, setErrForm] = useState(null);
 
-  const handleSubmit = async event => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       const response = await axiosDefault.patch(`/activation-user/${email}`, {
-        activationToken
+        activationToken,
       });
 
       dispatch(
         setNotification({
           message: response.data.message,
-          background: 'bg-teal-100'
+          background: "bg-teal-100",
         })
       );
 
       closeModal();
     } catch (e) {
-      const arrError = e.response.data.error.split(',');
+      const arrError = e.response.data.error.split(",");
       setErrForm(arrError);
     }
   };
@@ -38,8 +38,8 @@ const ActivationUser = () => {
   const closeModal = () => {
     setShowModal(false);
     setErrForm(null);
-    setActivationToken('');
-    navigate('/');
+    setActivationToken("");
+    navigate("/");
   };
 
   return (
@@ -64,11 +64,12 @@ const ActivationUser = () => {
                 placeholder="token"
                 className="w-full p-1 mb-1 rounded-md border"
                 value={activationToken}
-                onChange={e => setActivationToken(e.target.value)}
+                onChange={(e) => setActivationToken(e.target.value)}
               />
               <button
                 type="submit"
-                className="w-full p-1 mb-1 rounded-md border bg-teal-300">
+                className="w-full p-1 mb-1 rounded-md border bg-teal-300"
+              >
                 submit
               </button>
             </form>

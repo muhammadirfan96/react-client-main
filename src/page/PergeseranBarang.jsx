@@ -1,15 +1,15 @@
-import { useState, useEffect } from 'react';
-import { axiosRT } from '../config/axios.js';
-import { useDispatch, useSelector } from 'react-redux';
-import { setNotification } from '../redux/notificationSlice.js';
-import { setConfirmation } from '../redux/confirmationSlice.js';
-import { HiMiniMagnifyingGlass } from 'react-icons/hi2';
+import { useState, useEffect } from "react";
+import { axiosRT } from "../config/axios.js";
+import { useDispatch, useSelector } from "react-redux";
+import { setNotification } from "../redux/notificationSlice.js";
+import { setConfirmation } from "../redux/confirmationSlice.js";
+import { HiMiniMagnifyingGlass } from "react-icons/hi2";
 
 const PergeseranBarang = () => {
   const dispatch = useDispatch();
 
-  const token = useSelector(state => state.jwToken.token);
-  const expire = useSelector(state => state.jwToken.expire);
+  const token = useSelector((state) => state.jwToken.token);
+  const expire = useSelector((state) => state.jwToken.expire);
 
   const axiosInterceptors = axiosRT(token, expire, dispatch);
 
@@ -19,9 +19,9 @@ const PergeseranBarang = () => {
 
   const [limit, setLimit] = useState(4);
   const [page, setPage] = useState(1);
-  const [key, setKey] = useState('');
-  const [search, setSearch] = useState('');
-  const [searchBased, setSearchBased] = useState('tanggal');
+  const [key, setKey] = useState("");
+  const [search, setSearch] = useState("");
+  const [searchBased, setSearchBased] = useState("tanggal");
 
   const findPergeseranBarang = async () => {
     try {
@@ -29,18 +29,18 @@ const PergeseranBarang = () => {
         `/pergeseran-barang?limit=${limit}&page=${page}&${key}`
       );
 
-      const addedItemPromises = response.data.data.map(async element => {
+      const addedItemPromises = response.data.data.map(async (element) => {
         const [namaRes, createdByRes, updatedByRes] = await Promise.all([
           axiosInterceptors.get(
             `/inventori-barang/${element.id_inventaris_barang}`
           ),
           axiosInterceptors.get(`/user/${element.createdBy}`),
-          axiosInterceptors.get(`/user/${element.updatedBy}`)
+          axiosInterceptors.get(`/user/${element.updatedBy}`),
         ]);
         return {
           nama: namaRes.data.nama,
           createdBy: createdByRes.data.email,
-          updatedBy: updatedByRes.data.email
+          updatedBy: updatedByRes.data.email,
         };
       });
 
@@ -50,15 +50,15 @@ const PergeseranBarang = () => {
         ...item,
         nama: addedItem[index].nama,
         created_by: addedItem[index].createdBy,
-        updated_by: addedItem[index].updatedBy
+        updated_by: addedItem[index].updatedBy,
       }));
 
       setPergeseranBarang(result);
       setAllPage(response.data.all_page);
     } catch (e) {
-      const arrError = e.response.data.error.split(',');
+      const arrError = e.response.data.error.split(",");
       dispatch(
-        setNotification({ message: arrError, background: 'bg-red-100' })
+        setNotification({ message: arrError, background: "bg-red-100" })
       );
     }
   };
@@ -69,8 +69,9 @@ const PergeseranBarang = () => {
       <button
         onClick={() => setPage(i)}
         className={`${
-          i == page ? 'bg-teal-300' : ''
-        } text-xs px-1 mx-1 rounded border border-teal-100`}>
+          i == page ? "bg-teal-300" : ""
+        } text-xs px-1 mx-1 rounded border border-teal-100`}
+      >
         {i}
       </button>
     );
@@ -97,25 +98,25 @@ const PergeseranBarang = () => {
                 <input
                   type="button"
                   value="4"
-                  onClick={e => setLimit(e.target.value)}
+                  onClick={(e) => setLimit(e.target.value)}
                   className={`${
-                    limit == 4 ? 'bg-teal-300' : ''
+                    limit == 4 ? "bg-teal-300" : ""
                   } text-xs px-2 mx-1 rounded border border-teal-100`}
                 />
                 <input
                   type="button"
                   value="6"
-                  onClick={e => setLimit(e.target.value)}
+                  onClick={(e) => setLimit(e.target.value)}
                   className={`${
-                    limit == 6 ? 'bg-teal-300' : ''
+                    limit == 6 ? "bg-teal-300" : ""
                   } text-xs px-2 mx-1 rounded border border-teal-100`}
                 />
                 <input
                   type="button"
                   value="8"
-                  onClick={e => setLimit(e.target.value)}
+                  onClick={(e) => setLimit(e.target.value)}
                   className={`${
-                    limit == 8 ? 'bg-teal-300' : ''
+                    limit == 8 ? "bg-teal-300" : ""
                   } text-xs px-2 mx-1 rounded border border-teal-100`}
                 />
               </div>
@@ -128,7 +129,8 @@ const PergeseranBarang = () => {
               <p className="text-xs border-b border-teal-300">
                 <select
                   value={searchBased}
-                  onChange={e => setSearchBased(e.target.value)}>
+                  onChange={(e) => setSearchBased(e.target.value)}
+                >
                   <option selected>tanggal</option>
                   <option>lokasi_awal</option>
                   <option>lokasi_akhir</option>
@@ -136,7 +138,8 @@ const PergeseranBarang = () => {
                 </select>
                 <button
                   onClick={() => setKey(`${searchBased}=${search}`)}
-                  className="text-xs text-white italic bg-green-700 p-1 ml-1 rounded">
+                  className="text-xs text-white italic bg-green-700 p-1 ml-1 rounded"
+                >
                   <HiMiniMagnifyingGlass />
                 </button>
               </p>
@@ -147,7 +150,7 @@ const PergeseranBarang = () => {
                   placeholder="..."
                   className="border border-teal-100 rounded"
                   value={search}
-                  onChange={e => setSearch(e.target.value)}
+                  onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
             </div>
@@ -167,7 +170,7 @@ const PergeseranBarang = () => {
                 <th className="px-2">created_at</th>
                 <th className="px-2">updated_at</th>
               </tr>
-              {pergeseranBarang.map(each => (
+              {pergeseranBarang.map((each) => (
                 <tr key={each._id} className="border-b border-teal-300">
                   <td className="px-2">{each.nama}</td>
                   <td className="px-2">{each.jumlah}</td>

@@ -1,15 +1,15 @@
-import { useState, useEffect } from 'react';
-import { axiosRT } from '../config/axios.js';
-import { useDispatch, useSelector } from 'react-redux';
-import { setNotification } from '../redux/notificationSlice.js';
-import { setConfirmation } from '../redux/confirmationSlice.js';
-import { HiMiniMagnifyingGlass } from 'react-icons/hi2';
+import { useState, useEffect } from "react";
+import { axiosRT } from "../config/axios.js";
+import { useDispatch, useSelector } from "react-redux";
+import { setNotification } from "../redux/notificationSlice.js";
+import { setConfirmation } from "../redux/confirmationSlice.js";
+import { HiMiniMagnifyingGlass } from "react-icons/hi2";
 
 const InventoriBarang = () => {
   const dispatch = useDispatch();
 
-  const token = useSelector(state => state.jwToken.token);
-  const expire = useSelector(state => state.jwToken.expire);
+  const token = useSelector((state) => state.jwToken.token);
+  const expire = useSelector((state) => state.jwToken.expire);
 
   const axiosInterceptors = axiosRT(token, expire, dispatch);
 
@@ -19,9 +19,9 @@ const InventoriBarang = () => {
 
   const [limit, setLimit] = useState(4);
   const [page, setPage] = useState(1);
-  const [key, setKey] = useState('');
-  const [search, setSearch] = useState('');
-  const [searchBased, setSearchBased] = useState('nama');
+  const [key, setKey] = useState("");
+  const [search, setSearch] = useState("");
+  const [searchBased, setSearchBased] = useState("nama");
 
   const findInventoriBarang = async () => {
     try {
@@ -29,14 +29,14 @@ const InventoriBarang = () => {
         `/inventori-barang?limit=${limit}&page=${page}&${key}`
       );
 
-      const addedItemPromises = response.data.data.map(async element => {
+      const addedItemPromises = response.data.data.map(async (element) => {
         const [createdByRes, updatedByRes] = await Promise.all([
           axiosInterceptors.get(`/user/${element.createdBy}`),
-          axiosInterceptors.get(`/user/${element.updatedBy}`)
+          axiosInterceptors.get(`/user/${element.updatedBy}`),
         ]);
         return {
           createdBy: createdByRes.data.email,
-          updatedBy: updatedByRes.data.email
+          updatedBy: updatedByRes.data.email,
         };
       });
 
@@ -45,15 +45,15 @@ const InventoriBarang = () => {
       const result = response.data.data.map((item, index) => ({
         ...item,
         created_by: addedItem[index].createdBy,
-        updated_by: addedItem[index].updatedBy
+        updated_by: addedItem[index].updatedBy,
       }));
 
       setInventoriBarang(result);
       setAllPage(response.data.all_page);
     } catch (e) {
-      const arrError = e.response.data.error.split(',');
+      const arrError = e.response.data.error.split(",");
       dispatch(
-        setNotification({ message: arrError, background: 'bg-red-100' })
+        setNotification({ message: arrError, background: "bg-red-100" })
       );
     }
   };
@@ -64,8 +64,9 @@ const InventoriBarang = () => {
       <button
         onClick={() => setPage(i)}
         className={`${
-          i == page ? 'bg-teal-300' : ''
-        } text-xs px-1 mx-1 rounded border border-teal-100`}>
+          i == page ? "bg-teal-300" : ""
+        } text-xs px-1 mx-1 rounded border border-teal-100`}
+      >
         {i}
       </button>
     );
@@ -92,25 +93,25 @@ const InventoriBarang = () => {
                 <input
                   type="button"
                   value="4"
-                  onClick={e => setLimit(e.target.value)}
+                  onClick={(e) => setLimit(e.target.value)}
                   className={`${
-                    limit == 4 ? 'bg-teal-300' : ''
+                    limit == 4 ? "bg-teal-300" : ""
                   } text-xs px-2 mx-1 rounded border border-teal-100`}
                 />
                 <input
                   type="button"
                   value="6"
-                  onClick={e => setLimit(e.target.value)}
+                  onClick={(e) => setLimit(e.target.value)}
                   className={`${
-                    limit == 6 ? 'bg-teal-300' : ''
+                    limit == 6 ? "bg-teal-300" : ""
                   } text-xs px-2 mx-1 rounded border border-teal-100`}
                 />
                 <input
                   type="button"
                   value="8"
-                  onClick={e => setLimit(e.target.value)}
+                  onClick={(e) => setLimit(e.target.value)}
                   className={`${
-                    limit == 8 ? 'bg-teal-300' : ''
+                    limit == 8 ? "bg-teal-300" : ""
                   } text-xs px-2 mx-1 rounded border border-teal-100`}
                 />
               </div>
@@ -123,14 +124,16 @@ const InventoriBarang = () => {
               <p className="text-xs border-b border-teal-300">
                 <select
                   value={searchBased}
-                  onChange={e => setSearchBased(e.target.value)}>
+                  onChange={(e) => setSearchBased(e.target.value)}
+                >
                   <option selected>nama</option>
                   <option>jenis</option>
                   <option>nomor_seri</option>
                 </select>
                 <button
                   onClick={() => setKey(`${searchBased}=${search}`)}
-                  className="text-xs text-white italic bg-green-700 p-1 ml-1 rounded">
+                  className="text-xs text-white italic bg-green-700 p-1 ml-1 rounded"
+                >
                   <HiMiniMagnifyingGlass />
                 </button>
               </p>
@@ -141,7 +144,7 @@ const InventoriBarang = () => {
                   placeholder="..."
                   className="border border-teal-100 rounded"
                   value={search}
-                  onChange={e => setSearch(e.target.value)}
+                  onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
             </div>
@@ -160,7 +163,7 @@ const InventoriBarang = () => {
                 <th className="px-2">created_at</th>
                 <th className="px-2">updated_at</th>
               </tr>
-              {inventoriBarang.map(each => (
+              {inventoriBarang.map((each) => (
                 <tr key={each._id} className="border-b border-teal-300">
                   <td className="px-2">{each.nama}</td>
                   <td className="px-2">{each.jumlah}</td>

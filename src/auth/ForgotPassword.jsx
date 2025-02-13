@@ -1,31 +1,31 @@
-import { useState } from 'react';
-import { axiosDefault } from '../config/axios.js';
-import { useDispatch } from 'react-redux';
-import { setNotification } from '../redux/notificationSlice.js';
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { axiosDefault } from "../config/axios.js";
+import { useDispatch } from "react-redux";
+import { setNotification } from "../redux/notificationSlice.js";
+import { useNavigate } from "react-router-dom";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [errForm, setErrForm] = useState(null);
 
-  const handleSubmit = async event => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axiosDefault.post('/forgot-password', { email });
+      const response = await axiosDefault.post("/forgot-password", { email });
       dispatch(
         setNotification({
           message: response.data?.message,
-          background: 'bg-teal-100'
+          background: "bg-teal-100",
         })
       );
 
       closeModal();
       navigate(`/reset-password/${email}`);
     } catch (e) {
-      const arrError = e.response.data.error.split(',');
+      const arrError = e.response.data.error.split(",");
       setErrForm(arrError);
     }
   };
@@ -35,8 +35,8 @@ const ForgotPassword = () => {
   const closeModal = () => {
     setShowModal(false);
     setErrForm(null);
-    setEmail('');
-    navigate('/');
+    setEmail("");
+    navigate("/");
   };
 
   return (
@@ -49,7 +49,8 @@ const ForgotPassword = () => {
             </p>
             <button
               onClick={closeModal}
-              className="absolute -right-1 -top-1 rounded bg-red-700 px-1 text-white">
+              className="absolute -right-1 -top-1 rounded bg-red-700 px-1 text-white"
+            >
               x
             </button>
             {errForm && (
@@ -65,11 +66,12 @@ const ForgotPassword = () => {
                 placeholder="email"
                 className="w-full p-1 mb-1 rounded-md border"
                 value={email}
-                onChange={e => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
               />
               <button
                 type="submit"
-                className="w-full p-1 mb-1 rounded-md border bg-teal-300">
+                className="w-full p-1 mb-1 rounded-md border bg-teal-300"
+              >
                 submit
               </button>
             </form>

@@ -1,4 +1,4 @@
-import { SiMongodb, SiExpress, SiReact, SiNodedotjs } from 'react-icons/si';
+import { SiMongodb, SiExpress, SiReact, SiNodedotjs } from "react-icons/si";
 
 const Home = () => {
   return (
