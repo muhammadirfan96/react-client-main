@@ -57,13 +57,13 @@ const LokasiPenyimpanan = () => {
       // setLokasiPenyimpanan(lokasiPenyimpanan);
 
       const response = await axiosInterceptors.get(
-        `/lokasi-penyimpanan?limit=${limit}&page=${page}&${key}`
+        `/lokasi-penyimpanan?limit=${limit}&page=${page}&${key}`,
       );
 
       const addedItemPromises = response.data.data.map(async (element) => {
         const [namaRes, createdByRes, updatedByRes] = await Promise.all([
           axiosInterceptors.get(
-            `/inventori-barang/${element.id_inventaris_barang}`
+            `/inventori-barang/${element.id_inventaris_barang}`,
           ),
           axiosInterceptors.get(`/user/${element.createdBy}`),
           axiosInterceptors.get(`/user/${element.updatedBy}`),
@@ -89,7 +89,7 @@ const LokasiPenyimpanan = () => {
     } catch (e) {
       const arrError = e.response.data.error.split(",");
       dispatch(
-        setNotification({ message: arrError, background: "bg-red-100" })
+        setNotification({ message: arrError, background: "bg-red-100" }),
       );
     }
   };
@@ -101,10 +101,10 @@ const LokasiPenyimpanan = () => {
         onClick={() => setPage(i)}
         className={`${
           i == page ? "bg-teal-300" : ""
-        } text-xs px-1 mx-1 rounded border border-teal-100`}
+        } mx-1 rounded border border-teal-100 px-1 text-xs`}
       >
         {i}
-      </button>
+      </button>,
     );
   }
 
@@ -114,17 +114,17 @@ const LokasiPenyimpanan = () => {
 
   return token ? (
     <>
-      <div className="flex flex-wrap gap-2 justify-evenly mt-2">
+      <div className="mt-2 flex flex-wrap justify-evenly gap-2">
         <div className="w-[95%] md:w-[75%] lg:w-[45%]">
           {/*judul*/}
-          <p className="p-1 mb-2 shadow rounded bg-teal-300 text-center">
+          <p className="mb-2 rounded bg-teal-300 p-1 text-center shadow">
             lokasi penyimpanan
           </p>
 
           {/*pagination*/}
-          <div className="flex flex-wrap justify-between mb-2">
-            <div className="w-[30%] rounded shadow shadow-teal-100 p-1">
-              <p className="text-xs border-b border-teal-300">limit</p>
+          <div className="mb-2 flex flex-wrap justify-between">
+            <div className="w-[30%] rounded p-1 shadow shadow-teal-100">
+              <p className="border-b border-teal-300 text-xs">limit</p>
               <div>
                 <input
                   type="button"
@@ -132,7 +132,7 @@ const LokasiPenyimpanan = () => {
                   onClick={(e) => setLimit(e.target.value)}
                   className={`${
                     limit == 4 ? "bg-teal-300" : ""
-                  } text-xs px-2 mx-1 rounded border border-teal-100`}
+                  } mx-1 rounded border border-teal-100 px-2 text-xs`}
                 />
                 <input
                   type="button"
@@ -140,7 +140,7 @@ const LokasiPenyimpanan = () => {
                   onClick={(e) => setLimit(e.target.value)}
                   className={`${
                     limit == 6 ? "bg-teal-300" : ""
-                  } text-xs px-2 mx-1 rounded border border-teal-100`}
+                  } mx-1 rounded border border-teal-100 px-2 text-xs`}
                 />
                 <input
                   type="button"
@@ -148,16 +148,16 @@ const LokasiPenyimpanan = () => {
                   onClick={(e) => setLimit(e.target.value)}
                   className={`${
                     limit == 8 ? "bg-teal-300" : ""
-                  } text-xs px-2 mx-1 rounded border border-teal-100`}
+                  } mx-1 rounded border border-teal-100 px-2 text-xs`}
                 />
               </div>
             </div>
-            <div className="w-[30%] rounded shadow shadow-teal-100 p-1">
-              <p className="text-xs border-b border-teal-300 mb-1">page</p>
+            <div className="w-[30%] rounded p-1 shadow shadow-teal-100">
+              <p className="mb-1 border-b border-teal-300 text-xs">page</p>
               <div className="flex overflow-auto">{pageComponents}</div>
             </div>
-            <div className="w-[30%] rounded shadow shadow-teal-100 p-1">
-              <p className="text-xs border-b border-teal-300">
+            <div className="w-[30%] rounded p-1 shadow shadow-teal-100">
+              <p className="border-b border-teal-300 text-xs">
                 <select
                   value={searchBased}
                   onChange={(e) => setSearchBased(e.target.value)}
@@ -166,7 +166,7 @@ const LokasiPenyimpanan = () => {
                 </select>
                 <button
                   onClick={() => setKey(`${searchBased}=${search}`)}
-                  className="text-xs text-white italic bg-green-700 p-1 ml-1 rounded"
+                  className="ml-1 rounded bg-green-700 p-1 text-xs italic text-white"
                 >
                   <HiMiniMagnifyingGlass />
                 </button>
@@ -176,7 +176,7 @@ const LokasiPenyimpanan = () => {
                   type="text"
                   autocomplete="off"
                   placeholder="..."
-                  className="border border-teal-100 rounded"
+                  className="rounded border border-teal-100"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
@@ -185,9 +185,9 @@ const LokasiPenyimpanan = () => {
           </div>
 
           {/*tabel*/}
-          <div className="w-full rounded-md shadow-md shadow-teal-100 p-2 overflow-auto">
+          <div className="w-full overflow-auto rounded-md p-2 shadow-md shadow-teal-100">
             <table className="w-full">
-              <tr className="bg-teal-300 border-b-2 border-teal-700">
+              <tr className="border-b-2 border-teal-700 bg-teal-300">
                 <th className="px-2">nama</th>
                 <th className="px-2">lokasi</th>
                 <th className="px-2">jumlah</th>
@@ -213,7 +213,7 @@ const LokasiPenyimpanan = () => {
       </div>
     </>
   ) : (
-    <div className="text-center p-4 m-4 rounded bg-red-100">unauthorized</div>
+    <div className="m-4 rounded bg-red-100 p-4 text-center">unauthorized</div>
   );
 };
 

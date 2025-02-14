@@ -53,7 +53,7 @@ const Pelanggan = () => {
         setNotification({
           message: "new data has been added",
           background: "bg-teal-100",
-        })
+        }),
       );
       closeModal();
       findPelanggan();
@@ -75,7 +75,7 @@ const Pelanggan = () => {
         setNotification({
           message: "selected data has been updated",
           background: "bg-teal-100",
-        })
+        }),
       );
       closeModal();
       findPelanggan();
@@ -92,13 +92,13 @@ const Pelanggan = () => {
         setNotification({
           message: "selected data has been deleted",
           background: "bg-teal-100",
-        })
+        }),
       );
       findPelanggan();
     } catch (e) {
       const arrError = e.response.data.error.split(",");
       dispatch(
-        setNotification({ message: arrError, background: "bg-red-100" })
+        setNotification({ message: arrError, background: "bg-red-100" }),
       );
     }
   };
@@ -116,7 +116,7 @@ const Pelanggan = () => {
   const findPelanggan = async () => {
     try {
       const response = await axiosInterceptors.get(
-        `/pelanggan?limit=${limit}&page=${page}&${key}`
+        `/pelanggan?limit=${limit}&page=${page}&${key}`,
       );
 
       const addedItemPromises = response.data.data.map(async (element) => {
@@ -143,7 +143,7 @@ const Pelanggan = () => {
     } catch (e) {
       const arrError = e.response.data.error.split(",");
       dispatch(
-        setNotification({ message: arrError, background: "bg-red-100" })
+        setNotification({ message: arrError, background: "bg-red-100" }),
       );
     }
   };
@@ -155,10 +155,10 @@ const Pelanggan = () => {
         onClick={() => setPage(i)}
         className={`${
           i == page ? "bg-teal-300" : ""
-        } text-xs px-1 mx-1 rounded border border-teal-100`}
+        } mx-1 rounded border border-teal-100 px-1 text-xs`}
       >
         {i}
-      </button>
+      </button>,
     );
   }
 
@@ -180,17 +180,17 @@ const Pelanggan = () => {
 
   return token ? (
     <>
-      <div className="flex flex-wrap gap-2 justify-evenly mt-2">
+      <div className="mt-2 flex flex-wrap justify-evenly gap-2">
         <div className="w-[95%] md:w-[75%] lg:w-[45%]">
           {/*judul*/}
-          <p className="p-1 mb-2 shadow rounded bg-teal-300 text-center">
+          <p className="mb-2 rounded bg-teal-300 p-1 text-center shadow">
             pelanggan
           </p>
 
           {/*pagination*/}
-          <div className="flex flex-wrap justify-between mb-2">
-            <div className="w-[30%] rounded shadow shadow-teal-100 p-1">
-              <p className="text-xs border-b border-teal-300">limit</p>
+          <div className="mb-2 flex flex-wrap justify-between">
+            <div className="w-[30%] rounded p-1 shadow shadow-teal-100">
+              <p className="border-b border-teal-300 text-xs">limit</p>
               <div>
                 <input
                   type="button"
@@ -198,7 +198,7 @@ const Pelanggan = () => {
                   onClick={(e) => setLimit(e.target.value)}
                   className={`${
                     limit == 4 ? "bg-teal-300" : ""
-                  } text-xs px-2 mx-1 rounded border border-teal-100`}
+                  } mx-1 rounded border border-teal-100 px-2 text-xs`}
                 />
                 <input
                   type="button"
@@ -206,7 +206,7 @@ const Pelanggan = () => {
                   onClick={(e) => setLimit(e.target.value)}
                   className={`${
                     limit == 6 ? "bg-teal-300" : ""
-                  } text-xs px-2 mx-1 rounded border border-teal-100`}
+                  } mx-1 rounded border border-teal-100 px-2 text-xs`}
                 />
                 <input
                   type="button"
@@ -214,16 +214,16 @@ const Pelanggan = () => {
                   onClick={(e) => setLimit(e.target.value)}
                   className={`${
                     limit == 8 ? "bg-teal-300" : ""
-                  } text-xs px-2 mx-1 rounded border border-teal-100`}
+                  } mx-1 rounded border border-teal-100 px-2 text-xs`}
                 />
               </div>
             </div>
-            <div className="w-[30%] rounded shadow shadow-teal-100 p-1">
-              <p className="text-xs border-b border-teal-300 mb-1">page</p>
+            <div className="w-[30%] rounded p-1 shadow shadow-teal-100">
+              <p className="mb-1 border-b border-teal-300 text-xs">page</p>
               <div className="flex overflow-auto">{pageComponents}</div>
             </div>
-            <div className="w-[30%] rounded shadow shadow-teal-100 p-1">
-              <p className="text-xs border-b border-teal-300">
+            <div className="w-[30%] rounded p-1 shadow shadow-teal-100">
+              <p className="border-b border-teal-300 text-xs">
                 <select
                   value={searchBased}
                   onChange={(e) => setSearchBased(e.target.value)}
@@ -234,7 +234,7 @@ const Pelanggan = () => {
                 </select>
                 <button
                   onClick={() => setKey(`${searchBased}=${search}`)}
-                  className="text-xs text-white italic bg-green-700 p-1 ml-1 rounded"
+                  className="ml-1 rounded bg-green-700 p-1 text-xs italic text-white"
                 >
                   <HiMiniMagnifyingGlass />
                 </button>
@@ -244,7 +244,7 @@ const Pelanggan = () => {
                   type="text"
                   autocomplete="off"
                   placeholder="..."
-                  className="border border-teal-100 rounded"
+                  className="rounded border border-teal-100"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
@@ -254,15 +254,15 @@ const Pelanggan = () => {
           {/*btn add*/}
           <button
             onClick={handleAdd}
-            className="w-full p-1 mb-2 rounded-md border bg-teal-300 text-xs"
+            className="mb-2 w-full rounded-md border bg-teal-300 p-1 text-xs"
           >
             add data
           </button>
 
           {/*tabel*/}
-          <div className="w-full rounded-md shadow-md shadow-teal-100 p-2 overflow-auto">
+          <div className="w-full overflow-auto rounded-md p-2 shadow-md shadow-teal-100">
             <table className="w-full">
-              <tr className="bg-teal-300 border-b-2 border-teal-700">
+              <tr className="border-b-2 border-teal-700 bg-teal-300">
                 <th className="px-2">nama</th>
                 <th className="px-2">alamat</th>
                 <th className="px-2">kontak</th>
@@ -284,7 +284,7 @@ const Pelanggan = () => {
                   <td className="px-2">
                     <button
                       onClick={() => handleUpdate(each._id)}
-                      className="text-xs w-full italic rounded p-1 bg-green-700 text-white"
+                      className="w-full rounded bg-green-700 p-1 text-xs italic text-white"
                     >
                       update
                     </button>
@@ -297,10 +297,10 @@ const Pelanggan = () => {
                             handleOke: () => handleDelete(each._id),
                             handleCancel: () =>
                               dispatch(setConfirmation(false)),
-                          })
+                          }),
                         )
                       }
-                      className="text-xs w-full italic rounded p-1 bg-red-700 text-white"
+                      className="w-full rounded bg-red-700 p-1 text-xs italic text-white"
                     >
                       delete
                     </button>
@@ -314,9 +314,9 @@ const Pelanggan = () => {
 
       {/*modal add/update*/}
       {showModal && (
-        <div className="bg-slate-900 bg-opacity-80 fixed right-0 left-0 top-0 bottom-0 z-10 flex justify-center items-center">
-          <div className="w-[95%] md:w-[80%] lg:w-[50%] rounded-md shadow-md shadow-teal-100 bg-white relative">
-            <p className="text-center border-b-2 border-teal-700 mb-2">
+        <div className="fixed bottom-0 left-0 right-0 top-0 z-10 flex items-center justify-center bg-slate-900 bg-opacity-80">
+          <div className="relative w-[95%] rounded-md bg-white shadow-md shadow-teal-100 md:w-[80%] lg:w-[50%]">
+            <p className="mb-2 border-b-2 border-teal-700 text-center">
               {namaModal}
             </p>
             <button
@@ -325,9 +325,9 @@ const Pelanggan = () => {
             >
               x
             </button>
-            <div className="max-h-96 md:max-h-72 overflow-auto p-2 mt-1">
+            <div className="mt-1 max-h-96 overflow-auto p-2 md:max-h-72">
               {errForm && (
-                <div className="text-xs text-red-700 italic rounded border border-red-700 mb-2 p-1">
+                <div className="mb-2 rounded border border-red-700 p-1 text-xs italic text-red-700">
                   {errForm.map((err, index) => (
                     <p key={index}>{err}</p>
                   ))}
@@ -337,27 +337,27 @@ const Pelanggan = () => {
                 <input
                   type="text"
                   placeholder="nama"
-                  className="w-full p-1 mb-1 rounded-md border"
+                  className="mb-1 w-full rounded-md border p-1"
                   value={nama}
                   onChange={(e) => setNama(e.target.value)}
                 />
                 <input
                   type="text"
                   placeholder="alamat"
-                  className="w-full p-1 mb-1 rounded-md border"
+                  className="mb-1 w-full rounded-md border p-1"
                   value={alamat}
                   onChange={(e) => setAlamat(e.target.value)}
                 />
                 <input
                   type="text"
                   placeholder="kontak"
-                  className="w-full p-1 mb-1 rounded-md border"
+                  className="mb-1 w-full rounded-md border p-1"
                   value={kontak}
                   onChange={(e) => setKontak(e.target.value)}
                 />
                 <button
                   type="submit"
-                  className="w-full p-1 mb-1 rounded-md border bg-teal-300"
+                  className="mb-1 w-full rounded-md border bg-teal-300 p-1"
                 >
                   submit
                 </button>
@@ -368,7 +368,7 @@ const Pelanggan = () => {
       )}
     </>
   ) : (
-    <div className="text-center p-4 m-4 rounded bg-red-100">unauthorized</div>
+    <div className="m-4 rounded bg-red-100 p-4 text-center">unauthorized</div>
   );
 };
 

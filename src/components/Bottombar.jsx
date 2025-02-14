@@ -66,31 +66,31 @@ const Bottombar = () => {
       <div
         className={`${
           bbar && "-mb-[62px]"
-        } fixed bottom-0 right-0 left-0 h-16 border-t-2 border-t-teal-700 bg-teal-300 md:hidden transition-all`}
+        } fixed bottom-0 left-0 right-0 h-16 border-t-2 border-t-teal-700 bg-teal-300 transition-all md:hidden`}
       >
         <button
           onClick={() => dispatch(setBottombar())}
-          className="absolute right-0 -top-[28px] bg-teal-700 pt-1 px-3 rounded-tl-lg"
+          className="absolute -top-[28px] right-0 rounded-tl-lg bg-teal-700 px-3 pt-1"
         >
           <span
             className={`${
               !bbar && "translate-x-2"
-            } border-2 rounded-sm border-white bg-white font-extrabold inline-block rotate-45 transition delay-500 h-4 mr-0.5`}
+            } mr-0.5 inline-block h-4 rotate-45 rounded-sm border-2 border-white bg-white font-extrabold transition delay-500`}
           ></span>
           <span
             className={`${
               !bbar && "-translate-x-2"
-            } border-2 rounded-sm border-black bg-black font-extrabold inline-block -rotate-45 transition delay-500 h-4 ml-0.5`}
+            } ml-0.5 inline-block h-4 -rotate-45 rounded-sm border-2 border-black bg-black font-extrabold transition delay-500`}
           ></span>
         </button>
 
-        <div className="overflow-auto flex p-1 transition-all text-center w-full">
+        <div className="flex w-full overflow-auto p-1 text-center transition-all">
           {menu.map((each) => (
             <button
               onClick={() => navigate(`/${each.path}`)}
-              className="bg-teal-700 text-white rounded-md p-1 m-1"
+              className="m-1 rounded-md bg-teal-700 p-1 text-white"
             >
-              <div className="w-10 h-10 flex justify-center items-center">
+              <div className="flex h-10 w-10 items-center justify-center">
                 {each.icon}
               </div>
             </button>
@@ -98,9 +98,9 @@ const Bottombar = () => {
 
           <button
             onClick={() => navigate("/product")}
-            className="bg-teal-700 text-white rounded-md p-1 m-1"
+            className="m-1 rounded-md bg-teal-700 p-1 text-white"
           >
-            <div className="w-10 h-10 flex justify-center items-center">
+            <div className="flex h-10 w-10 items-center justify-center">
               <BsBasket />
             </div>
           </button>

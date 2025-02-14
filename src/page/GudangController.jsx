@@ -12,10 +12,10 @@ const GudangController = () => {
   const token = useSelector((state) => state.jwToken.token);
   return token ? (
     <>
-      <div className="flex flex-wrap gap-2 justify-evenly mt-2">
+      <div className="mt-2 flex flex-wrap justify-evenly gap-2">
         <div className="w-[95%] md:w-[75%] lg:w-[45%]">
           {/*judul*/}
-          <p className="p-1 mb-2 shadow rounded bg-teal-300 text-center">
+          <p className="mb-2 rounded bg-teal-300 p-1 text-center shadow">
             manage gudang
           </p>
           <div className="flex flex-wrap justify-evenly gap-2">
@@ -28,7 +28,7 @@ const GudangController = () => {
       </div>
     </>
   ) : (
-    <div className="text-center p-4 m-4 rounded bg-red-100">unauthorized</div>
+    <div className="m-4 rounded bg-red-100 p-4 text-center">unauthorized</div>
   );
 };
 

@@ -64,15 +64,15 @@ const Sidebar = () => {
       <div
         className={`${
           !sbar && "-ml-52"
-        } overflow-auto hidden md:block bg-teal-300 border-teal-700 border-r-2 fixed left-0 top-[64px] bottom-0 w-52 p-4 transition-all`}
+        } fixed bottom-0 left-0 top-[64px] hidden w-52 overflow-auto border-r-2 border-teal-700 bg-teal-300 p-4 transition-all md:block`}
       >
         <div className="flex flex-col">
           {menu.map((each) => (
             <button
               onClick={() => navigate(`/${each.path}`)}
-              className="bg-teal-700 py-1 px-2 m-1 rounded shadow text-start text-white relative"
+              className="relative m-1 rounded bg-teal-700 px-2 py-1 text-start text-white shadow"
             >
-              <div className="inline-block mr-2">{each.icon}</div>
+              <div className="mr-2 inline-block">{each.icon}</div>
               {each.name}
               <BsCaretRight className="absolute right-1 top-2" />
             </button>
@@ -80,9 +80,9 @@ const Sidebar = () => {
 
           <button
             onClick={() => navigate("/product")}
-            className="bg-teal-700 py-1 px-2 m-1 rounded shadow text-start text-white relative"
+            className="relative m-1 rounded bg-teal-700 px-2 py-1 text-start text-white shadow"
           >
-            <BsBasket className="inline mr-2" />
+            <BsBasket className="mr-2 inline" />
             product
             <BsCaretRight className="absolute right-1 top-2" />
           </button>

@@ -34,14 +34,14 @@ const axiosRT = (token, expire, dispatch) => {
       } catch (e) {
         const arrError = e.response.data.error.split(",");
         dispatch(
-          setNotification({ message: arrError, background: "bg-red-100" })
+          setNotification({ message: arrError, background: "bg-red-100" }),
         );
       }
       return config;
     },
     (error) => {
       return Promise.reject(error);
-    }
+    },
   );
   return axiosInterceptors;
 };

@@ -9,8 +9,8 @@ const TopbarMobile = () => {
 
   return (
     <>
-      <div className="p-4 pt-3 bg-teal-700 fixed md:hidden top-0 right-0 left-0 h-16">
-        <p className="text-2xl md:text-4xl font-bold text-white mb-1">
+      <div className="fixed left-0 right-0 top-0 h-16 bg-teal-700 p-4 pt-3 md:hidden">
+        <p className="mb-1 text-2xl font-bold text-white md:text-4xl">
           <button onClick={() => navigate("/")} className="font-din">
             MERN STACK
           </button>
@@ -19,20 +19,20 @@ const TopbarMobile = () => {
         <div className="absolute right-2 top-2 text-xs">
           {username ? (
             <div className="text-right">
-              <p className="text-teal-300 mb-2">Hi, {username}</p>
+              <p className="mb-2 text-teal-300">Hi, {username}</p>
               <Logout />
             </div>
           ) : (
             <div className="flex">
               <button
                 onClick={() => navigate("/login")}
-                className="bg-teal-300 p-1 m-1 rounded shadow"
+                className="m-1 rounded bg-teal-300 p-1 shadow"
               >
                 login
               </button>
               <button
                 onClick={() => navigate("/register")}
-                className="bg-teal-300 p-1 m-1 rounded shadow"
+                className="m-1 rounded bg-teal-300 p-1 shadow"
               >
                 register
               </button>

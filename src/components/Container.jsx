@@ -27,7 +27,7 @@ const Container = () => {
       <div
         className={`${
           sbar && "md:ml-52"
-        } mx-auto mt-[64px] pt-5 fixed right-0 left-0 top-0 md:bottom-0 overflow-x-auto ${
+        } fixed left-0 right-0 top-0 mx-auto mt-[64px] overflow-x-auto pt-5 md:bottom-0 ${
           !bbar ? "bottom-20" : "bottom-0"
         }`}
       >

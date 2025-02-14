@@ -27,14 +27,14 @@ const PengirimanBarang = () => {
           jumlah,
           tanggal,
           id_pelanggan,
-        }
+        },
       );
 
       dispatch(
         setNotification({
           message: "barang ditambahkan ke daftar kirim",
           background: "bg-teal-100",
-        })
+        }),
       );
       closeModal();
     } catch (e) {
@@ -66,13 +66,13 @@ const PengirimanBarang = () => {
   const findLokasiPenyimpanan = async () => {
     try {
       const response = await axiosInterceptors.get(
-        `/lokasi-penyimpanan?lokasi=${keyLokasiPenyimpanan}`
+        `/lokasi-penyimpanan?lokasi=${keyLokasiPenyimpanan}`,
       );
 
       const addedItemPromises = response.data.data.map(async (element) => {
         const [namaRes] = await Promise.all([
           axiosInterceptors.get(
-            `/inventori-barang/${element.id_inventaris_barang}`
+            `/inventori-barang/${element.id_inventaris_barang}`,
           ),
         ]);
         return {
@@ -91,7 +91,7 @@ const PengirimanBarang = () => {
     } catch (e) {
       const arrError = e.response.data.error.split(",");
       dispatch(
-        setNotification({ message: arrError, background: "bg-red-100" })
+        setNotification({ message: arrError, background: "bg-red-100" }),
       );
     }
   };
@@ -118,13 +118,13 @@ const PengirimanBarang = () => {
   const findPelanggan = async () => {
     try {
       const response = await axiosInterceptors.get(
-        `/pelanggan?nama=${keyPelanggan}`
+        `/pelanggan?nama=${keyPelanggan}`,
       );
       setPelanggan(response.data.data);
     } catch (e) {
       const arrError = e.response.data.error.split(",");
       dispatch(
-        setNotification({ message: arrError, background: "bg-red-100" })
+        setNotification({ message: arrError, background: "bg-red-100" }),
       );
     }
   };
@@ -148,19 +148,19 @@ const PengirimanBarang = () => {
     <>
       <button
         onClick={openModal}
-        className="w-[95%] md:w-[45%] aspect-video rounded shadow bg-teal-700 m-2 p-2 "
+        className="m-2 aspect-video w-[95%] rounded bg-teal-700 p-2 shadow md:w-[45%]"
       >
-        <p className="text-white text-center border-b border-white">
+        <p className="border-b border-white text-center text-white">
           pengiriman barang
         </p>
-        <IoIosPaperPlane className="w-36 h-36 text-white mx-auto" />
+        <IoIosPaperPlane className="mx-auto h-36 w-36 text-white" />
       </button>
 
       {/*modal*/}
       {showModal && (
-        <div className="bg-slate-900 bg-opacity-80 fixed right-0 left-0 top-0 bottom-0 z-10 flex justify-center items-center">
-          <div className="w-[95%] md:w-[80%] lg:w-[50%] rounded-md shadow-md shadow-teal-100 bg-white relative">
-            <p className="text-center border-b-2 border-teal-700 mb-2">
+        <div className="fixed bottom-0 left-0 right-0 top-0 z-10 flex items-center justify-center bg-slate-900 bg-opacity-80">
+          <div className="relative w-[95%] rounded-md bg-white shadow-md shadow-teal-100 md:w-[80%] lg:w-[50%]">
+            <p className="mb-2 border-b-2 border-teal-700 text-center">
               pengiriman barang
             </p>
             <button
@@ -169,9 +169,9 @@ const PengirimanBarang = () => {
             >
               x
             </button>
-            <div className="max-h-96 md:max-h-72 overflow-auto p-2 mt-1">
+            <div className="mt-1 max-h-96 overflow-auto p-2 md:max-h-72">
               {errForm && (
-                <div className="text-xs text-red-700 italic rounded border border-red-700 mb-2 p-1">
+                <div className="mb-2 rounded border border-red-700 p-1 text-xs italic text-red-700">
                   {errForm.map((err, index) => (
                     <p key={index}>{err}</p>
                   ))}
@@ -181,7 +181,7 @@ const PengirimanBarang = () => {
                 {inputLokasiPenyimpanan ? (
                   <button
                     type="button"
-                    className="w-full p-1 mb-1 rounded-md border text-start"
+                    className="mb-1 w-full rounded-md border p-1 text-start"
                     onClick={() => setInputLokasiPenyimpanan(false)}
                   >
                     {namaLokasiPenyimpanan ? (
@@ -195,7 +195,7 @@ const PengirimanBarang = () => {
                     <select
                       value={id_lokasi_penyimpanan}
                       onChange={handleChangeOptionSelectLokasi}
-                      className="w-[50%] p-1 mb-1 rounded-md rounded-r-none border"
+                      className="mb-1 w-[50%] rounded-md rounded-r-none border p-1"
                     >
                       <option selected value="">
                         list barang...
@@ -216,7 +216,7 @@ const PengirimanBarang = () => {
                     <input
                       type="text"
                       placeholder="search_lokasi"
-                      className="w-[50%] p-1 mb-1 rounded-md rounded-l-none border"
+                      className="mb-1 w-[50%] rounded-md rounded-l-none border p-1"
                       value={keyLokasiPenyimpanan}
                       onChange={(e) => setKeyLokasiPenyimpanan(e.target.value)}
                     />
@@ -225,21 +225,21 @@ const PengirimanBarang = () => {
                 <input
                   type="text"
                   placeholder="jumlah"
-                  className="w-full p-1 mb-1 rounded-md border"
+                  className="mb-1 w-full rounded-md border p-1"
                   value={jumlah}
                   onChange={(e) => setJumlah(e.target.value)}
                 />
                 <input
                   type="datetime-local"
                   placeholder="tanggal"
-                  className="w-full p-1 mb-1 rounded-md border"
+                  className="mb-1 w-full rounded-md border p-1"
                   value={tanggal}
                   onChange={(e) => setTanggal(e.target.value)}
                 />
                 {inputPelanggan ? (
                   <button
                     type="button"
-                    className="w-full p-1 mb-1 rounded-md border text-start"
+                    className="mb-1 w-full rounded-md border p-1 text-start"
                     onClick={() => setInputPelanggan(false)}
                   >
                     {namaPelanggan ? (
@@ -253,7 +253,7 @@ const PengirimanBarang = () => {
                     <select
                       value={id_pelanggan}
                       onChange={handleChangeOptionSelectPelanggan}
-                      className="w-[50%] p-1 mb-1 rounded-md rounded-r-none border"
+                      className="mb-1 w-[50%] rounded-md rounded-r-none border p-1"
                     >
                       <option selected value="">
                         list pelanggan...
@@ -270,7 +270,7 @@ const PengirimanBarang = () => {
                     <input
                       type="text"
                       placeholder="search..."
-                      className="w-[50%] p-1 mb-1 rounded-md rounded-l-none border"
+                      className="mb-1 w-[50%] rounded-md rounded-l-none border p-1"
                       value={keyPelanggan}
                       onChange={(e) => setKeyPelanggan(e.target.value)}
                     />
@@ -278,7 +278,7 @@ const PengirimanBarang = () => {
                 )}
                 <button
                   type="submit"
-                  className="w-full p-1 mb-1 rounded-md border bg-teal-300"
+                  className="mb-1 w-full rounded-md border bg-teal-300 p-1"
                 >
                   submit
                 </button>

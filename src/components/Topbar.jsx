@@ -11,7 +11,7 @@ const Topbar = () => {
 
   return (
     <>
-      <div className="p-4 pt-3 bg-teal-700 hidden md:block fixed top-0 right-0 left-0 h-16">
+      <div className="fixed left-0 right-0 top-0 hidden h-16 bg-teal-700 p-4 pt-3 md:block">
         <button
           onClick={() => dispatch(setSidebar())}
           className="absolute left-6 top-6 hidden md:inline"
@@ -19,20 +19,20 @@ const Topbar = () => {
           <div
             className={`${
               sbar && "rotate-[35deg]"
-            } w-8 mb-[5px] border-2 rounded-sm border-black bg-black origin-left transition delay-500`}
+            } mb-[5px] w-8 origin-left rounded-sm border-2 border-black bg-black transition delay-500`}
           ></div>
           <div
             className={`${
               sbar && "opacity-0"
-            } w-8 mb-[5px] border-2 rounded-sm border-red-700 bg-red-700 transition delay-500`}
+            } mb-[5px] w-8 rounded-sm border-2 border-red-700 bg-red-700 transition delay-500`}
           ></div>
           <div
             className={`${
               sbar && "-rotate-[35deg]"
-            } w-8 mb-[5px] border-2 rounded-sm border-white bg-white origin-left transition delay-500`}
+            } mb-[5px] w-8 origin-left rounded-sm border-2 border-white bg-white transition delay-500`}
           ></div>
         </button>
-        <p className="text-center text-2xl md:text-4xl font-bold text-white mb-1">
+        <p className="mb-1 text-center text-2xl font-bold text-white md:text-4xl">
           <button onClick={() => navigate("/")} className="font-din">
             MERN STACK
           </button>
@@ -41,20 +41,20 @@ const Topbar = () => {
         <div className="absolute right-2 top-2 text-xs">
           {username ? (
             <div className="text-right">
-              <p className="text-teal-300 mb-2">Hi, {username}</p>
+              <p className="mb-2 text-teal-300">Hi, {username}</p>
               <Logout />
             </div>
           ) : (
             <div className="flex">
               <button
                 onClick={() => navigate("/login")}
-                className="bg-teal-300 p-1 m-1 rounded shadow"
+                className="m-1 rounded bg-teal-300 p-1 shadow"
               >
                 login
               </button>
               <button
                 onClick={() => navigate("/register")}
-                className="bg-teal-300 p-1 m-1 rounded shadow"
+                className="m-1 rounded bg-teal-300 p-1 shadow"
               >
                 register
               </button>
