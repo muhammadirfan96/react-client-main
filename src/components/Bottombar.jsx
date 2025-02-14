@@ -87,6 +87,7 @@ const Bottombar = () => {
         <div className="flex w-full overflow-auto p-1 text-center transition-all">
           {menu.map((each) => (
             <button
+              key={each.path}
               onClick={() => navigate(`/${each.path}`)}
               className="m-1 rounded-md bg-teal-700 p-1 text-white"
             >

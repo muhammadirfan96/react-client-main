@@ -69,6 +69,7 @@ const Sidebar = () => {
         <div className="flex flex-col">
           {menu.map((each) => (
             <button
+              key={each.path}
               onClick={() => navigate(`/${each.path}`)}
               className="relative m-1 rounded bg-teal-700 px-2 py-1 text-start text-white shadow"
             >
