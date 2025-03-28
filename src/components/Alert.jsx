@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { setNotification } from "../redux/notificationSlice.js";
+import { setConfirmation } from "../redux/confirmationSlice.js";
 
 const Confirmation = () => {
   const dispatch = useDispatch();
@@ -18,13 +19,16 @@ const Confirmation = () => {
             <p className="mb-2 text-center">{confirmation.message}</p>
             <div className="flex justify-center">
               <button
-                onClick={confirmation.handleCancel}
+                onClick={() => dispatch(setConfirmation(false))}
                 className="mx-1 rounded bg-red-700 p-1 text-xs text-white"
               >
                 calcel
               </button>
               <button
-                onClick={confirmation.handleOke}
+                onClick={() => {
+                  confirmation.handleOke();
+                  dispatch(setConfirmation(false));
+                }}
                 className="mx-1 rounded bg-green-700 p-1 text-xs text-white"
               >
                 oke

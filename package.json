@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "tailwind": "npx tailwindcss -i ./src/input.css -o ./src/output.css --watch",
+    "tailwind-dev": "npx tailwindcss -i ./src/input.css -o ./src/output.css --watch",
+    "tailwind-build": "npx tailwindcss -i ./src/input.css -o ./src/output.css --minify",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",

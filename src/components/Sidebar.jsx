@@ -13,49 +13,39 @@ const Sidebar = () => {
 
   const menu = [
     {
-      path: "gudang-controller",
+      path: "manage",
       icon: <BsSpeedometer />,
       name: "manage",
     },
     {
-      path: "inventori-barang",
+      path: "barang",
       icon: <AiOutlineShopping />,
-      name: "inventori",
+      name: "barang",
     },
     {
-      path: "lokasi-penyimpanan",
-      icon: <MdOutlineStorage />,
-      name: "lokasi",
-    },
-    {
-      path: "penerimaan-barang",
+      path: "transaksi-pembelian",
       icon: <IoReceiptOutline />,
-      name: "penerimaan",
+      name: "t-pembelian",
     },
     {
-      path: "pengiriman-barang",
+      path: "transaksi-penjualan",
       icon: <IoIosPaperPlane />,
-      name: "pengiriman",
+      name: "t-penjualan",
     },
     {
-      path: "pergeseran-barang",
-      icon: <MdCompareArrows />,
-      name: "pergeseran",
-    },
-    {
-      path: "stok-barang",
-      icon: <AiOutlineStock />,
-      name: "stok",
-    },
-    {
-      path: "pemasok",
+      path: "penjual",
       icon: <IoPeopleOutline />,
-      name: "pemasok",
+      name: "penjual",
     },
     {
-      path: "pelanggan",
+      path: "pembeli",
       icon: <FaUserFriends />,
-      name: "pelanggan",
+      name: "pembeli",
+    },
+    {
+      path: "product",
+      icon: <BsBasket />,
+      name: "product",
     },
   ];
 
@@ -71,7 +61,7 @@ const Sidebar = () => {
             <button
               key={each.path}
               onClick={() => navigate(`/${each.path}`)}
-              className="relative m-1 rounded bg-teal-700 px-2 py-1 text-start text-white shadow"
+              className="relative m-1 rounded bg-teal-600 px-2 py-1 text-start text-white shadow hover:bg-teal-700"
             >
               <div className="mr-2 inline-block">{each.icon}</div>
               {each.name}
@@ -79,14 +69,14 @@ const Sidebar = () => {
             </button>
           ))}
 
-          <button
+          {/* <button
             onClick={() => navigate("/product")}
             className="relative m-1 rounded bg-teal-700 px-2 py-1 text-start text-white shadow"
           >
             <BsBasket className="mr-2 inline" />
             product
             <BsCaretRight className="absolute right-1 top-2" />
-          </button>
+          </button> */}
         </div>
       </div>
     </>

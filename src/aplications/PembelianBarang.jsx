@@ -1,40 +1,40 @@
-import { MdCompareArrows } from "react-icons/md";
+import React from "react";
+import { IoReceiptOutline } from "react-icons/io5";
 import { useState, useEffect } from "react";
 import { axiosRT } from "../config/axios.js";
 import { useDispatch, useSelector } from "react-redux";
 import { setNotification } from "../redux/notificationSlice.js";
 import { setConfirmation } from "../redux/confirmationSlice.js";
 
-const PenerimaanBarang = () => {
+const PembelianBarang = () => {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.jwToken.token);
   const expire = useSelector((state) => state.jwToken.expire);
   const axiosInterceptors = axiosRT(token, expire, dispatch);
 
   // submit
-  const [nama, setNama] = useState("");
-  const [jumlah, setJumlah] = useState("");
-  const [jenis, setJenis] = useState("");
-  const [tanggal, setTanggal] = useState("");
-  const [id_pemasok, setid_pemasok] = useState("");
-  const [lokasi_penyimpanan, setlokasi_penyimpanan] = useState("");
   const [errForm, setErrForm] = useState(null);
+  const [kode, setKode] = useState("");
+  const [nama, setNama] = useState("");
+  const [tanggal_beli, setTanggal_beli] = useState("");
+  const [penjual_id, setPenjual_id] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await axiosInterceptors.post(`/penerimaan-barang`, {
-        nama,
-        jumlah,
-        jenis,
-        tanggal,
-        id_pemasok,
-        lokasi_penyimpanan,
-      });
+      await axiosInterceptors.post(
+        `/${import.meta.env.VITE_APP_NAME}/${import.meta.env.VITE_APP_VERSION}/pembelian-barang`,
+        {
+          kode,
+          nama,
+          tanggal_beli,
+          penjual_id,
+        },
+      );
 
       dispatch(
         setNotification({
-          message: "barang ditambahkan ke daftar inventori",
+          message: "transaksi pembelian berhasil",
           background: "bg-teal-100",
         }),
       );
@@ -51,28 +51,25 @@ const PenerimaanBarang = () => {
   const closeModal = () => {
     setShowModal(false);
     setErrForm(null);
+    setKode("");
     setNama("");
-    setJumlah("");
-    setJenis("");
-    setTanggal("");
-    setlokasi_penyimpanan("");
-    setid_pemasok("");
-    setInputPemasok(true);
-    setNamaPemasok("");
+    setTanggal_beli("");
+    setPenjual_id("");
   };
 
-  // option select id_pemasok
-  const [pemasok, setPemasok] = useState([]);
-  const [keyPemasok, setKeyPemasok] = useState("");
+  // PENJUAL_ID
+  // option select
+  const [penjual, setPenjual] = useState([]);
+  const [keyPenjual, setKeyPenjual] = useState("");
 
-  const findPemasok = async () => {
+  const findPenjual = async () => {
     try {
       const response = await axiosInterceptors.get(
-        `/pemasok?nama=${keyPemasok}`,
+        `/${import.meta.env.VITE_APP_NAME}/${import.meta.env.VITE_APP_VERSION}/penjuals?nama=${keyPenjual}`,
       );
-      setPemasok(response.data.data);
-    } catch (e) {
-      const arrError = e.response.data.error.split(",");
+      setPenjual(response.data.data);
+    } catch (error) {
+      const arrError = error.response.data.error.split(",");
       dispatch(
         setNotification({ message: arrError, background: "bg-red-100" }),
       );
@@ -80,18 +77,18 @@ const PenerimaanBarang = () => {
   };
 
   useEffect(() => {
-    findPemasok();
-  }, [keyPemasok]);
+    findPenjual();
+  }, [keyPenjual]);
 
-  //  input id_pemasok
-  const [inputPemasok, setInputPemasok] = useState(true);
-  const [namaPemasok, setNamaPemasok] = useState("");
+  // input
+  const [inputPenjual, setInputPenjual] = useState(true);
+  const [namaPenjual, setNamaPenjual] = useState("");
 
-  const handleChangeOptionSelectPemasok = (event) => {
+  const handleChangeOptionSelectPenjual = (event) => {
     const selected = event.target[event.target.selectedIndex];
-    setid_pemasok(selected.value);
-    setInputPemasok(true);
-    setNamaPemasok(selected.getAttribute("data-additional-info"));
+    setPenjual_id(selected.value);
+    setInputPenjual(true);
+    setNamaPenjual(selected.getAttribute("data-additional-info"));
   };
 
   return (
@@ -101,9 +98,9 @@ const PenerimaanBarang = () => {
         className="m-2 aspect-video w-[95%] rounded bg-teal-700 p-2 shadow md:w-[45%]"
       >
         <p className="border-b border-white text-center text-white">
-          penerimaan barang
+          pembelian barang
         </p>
-        <MdCompareArrows className="mx-auto h-36 w-36 text-white" />
+        <IoReceiptOutline className="mx-auto h-36 w-36 text-white" />
       </button>
 
       {/*modal*/}
@@ -111,7 +108,7 @@ const PenerimaanBarang = () => {
         <div className="fixed bottom-0 left-0 right-0 top-0 z-10 flex items-center justify-center bg-slate-900 bg-opacity-80">
           <div className="relative w-[95%] rounded-md bg-white shadow-md shadow-teal-100 md:w-[80%] lg:w-[50%]">
             <p className="mb-2 border-b-2 border-teal-700 text-center">
-              penerimaan barang (baru)
+              pembelian barang
             </p>
             <button
               onClick={closeModal}
@@ -130,63 +127,48 @@ const PenerimaanBarang = () => {
               <form onSubmit={handleSubmit}>
                 <input
                   type="text"
+                  placeholder="kode"
+                  className="mb-1 w-full rounded-md border p-1"
+                  value={kode}
+                  onChange={(e) => setKode(e.target.value)}
+                />
+                <input
+                  type="text"
                   placeholder="nama"
                   className="mb-1 w-full rounded-md border p-1"
                   value={nama}
                   onChange={(e) => setNama(e.target.value)}
                 />
                 <input
-                  type="text"
-                  placeholder="jumlah"
-                  className="mb-1 w-full rounded-md border p-1"
-                  value={jumlah}
-                  onChange={(e) => setJumlah(e.target.value)}
-                />
-                <input
-                  type="text"
-                  placeholder="jenis"
-                  className="mb-1 w-full rounded-md border p-1"
-                  value={jenis}
-                  onChange={(e) => setJenis(e.target.value)}
-                />
-                <input
                   type="datetime-local"
-                  placeholder="tanggal"
+                  placeholder="tanggal_beli"
                   className="mb-1 w-full rounded-md border p-1"
-                  value={tanggal}
-                  onChange={(e) => setTanggal(e.target.value)}
+                  value={tanggal_beli}
+                  onChange={(e) => setTanggal_beli(e.target.value)}
                 />
-                <input
-                  type="text"
-                  placeholder="lokasi_penyimpanan"
-                  className="mb-1 w-full rounded-md border p-1"
-                  value={lokasi_penyimpanan}
-                  onChange={(e) => setlokasi_penyimpanan(e.target.value)}
-                />
-                {inputPemasok ? (
+                {inputPenjual ? (
                   <button
                     type="button"
                     className="mb-1 w-full rounded-md border p-1 text-start"
-                    onClick={() => setInputPemasok(false)}
+                    onClick={() => setInputPenjual(false)}
                   >
-                    {namaPemasok ? (
-                      namaPemasok
+                    {namaPenjual ? (
+                      namaPenjual
                     ) : (
-                      <span className="text-slate-400">pemasok...</span>
+                      <span className="text-slate-400">penjual...</span>
                     )}
                   </button>
                 ) : (
                   <div className="flex justify-between">
                     <select
-                      value={id_pemasok}
-                      onChange={handleChangeOptionSelectPemasok}
+                      value={penjual_id}
+                      onChange={handleChangeOptionSelectPenjual}
                       className="mb-1 w-[50%] rounded-md rounded-r-none border p-1"
                     >
-                      <option selected value="">
-                        list pemasok...
-                      </option>
-                      {pemasok.map((each) => (
+                      <option value="">list penjual...</option>
+                      {penjual.map((each) => (
                         <option
+                          key={each._id}
                           value={each._id}
                           data-additional-info={each.nama}
                         >
@@ -196,10 +178,10 @@ const PenerimaanBarang = () => {
                     </select>
                     <input
                       type="text"
-                      placeholder="search_inventori"
+                      placeholder="search_penjual"
                       className="mb-1 w-[50%] rounded-md rounded-l-none border p-1"
-                      value={keyPemasok}
-                      onChange={(e) => setKeyPemasok(e.target.value)}
+                      value={keyPenjual}
+                      onChange={(e) => setKeyPenjual(e.target.value)}
                     />
                   </div>
                 )}
@@ -218,4 +200,4 @@ const PenerimaanBarang = () => {
   );
 };
 
-export default PenerimaanBarang;
+export default PembelianBarang;

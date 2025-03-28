@@ -11,6 +11,10 @@ const store = configureStore({
     confirmationAlert: confirmationReducer,
     bar: barReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false, // Menonaktifkan pengecekan serializability
+    }),
 });
 
 export default store;

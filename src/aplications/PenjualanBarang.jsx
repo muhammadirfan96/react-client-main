@@ -1,3 +1,4 @@
+import React from "react";
 import { IoIosPaperPlane } from "react-icons/io";
 import { useState, useEffect } from "react";
 import { axiosRT } from "../config/axios.js";
@@ -5,34 +6,32 @@ import { useDispatch, useSelector } from "react-redux";
 import { setNotification } from "../redux/notificationSlice.js";
 import { setConfirmation } from "../redux/confirmationSlice.js";
 
-const PengirimanBarang = () => {
+const PenjualanBarang = () => {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.jwToken.token);
   const expire = useSelector((state) => state.jwToken.expire);
   const axiosInterceptors = axiosRT(token, expire, dispatch);
 
   // submit
-  const [jumlah, setJumlah] = useState("");
-  const [tanggal, setTanggal] = useState("");
-  const [id_pelanggan, setid_pelanggan] = useState("");
-  const [id_lokasi_penyimpanan, setid_lokasi_penyimpanan] = useState("");
   const [errForm, setErrForm] = useState(null);
+  const [barang_id, setBarang_id] = useState("");
+  const [tanggal_jual, setTanggal_jual] = useState("");
+  const [pembeli_id, setPembeli_id] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       await axiosInterceptors.patch(
-        `/pengiriman-barang/${id_lokasi_penyimpanan}`,
+        `/${import.meta.env.VITE_APP_NAME}/${import.meta.env.VITE_APP_VERSION}/penjualan-barang/${barang_id}`,
         {
-          jumlah,
-          tanggal,
-          id_pelanggan,
+          tanggal_jual,
+          pembeli_id,
         },
       );
 
       dispatch(
         setNotification({
-          message: "barang ditambahkan ke daftar kirim",
+          message: "transaksi penjualan berhasil",
           background: "bg-teal-100",
         }),
       );
@@ -49,47 +48,23 @@ const PengirimanBarang = () => {
   const closeModal = () => {
     setShowModal(false);
     setErrForm(null);
-    setJumlah("");
-    setTanggal("");
-    setid_lokasi_penyimpanan("");
-    setInputLokasiPenyimpanan(true);
-    setNamaLokasiPenyimpanan("");
-    setid_pelanggan("");
-    setInputPelanggan(true);
-    setNamaPelanggan("");
+    setTanggal_jual("");
+    setPembeli_id("");
   };
 
-  // option select id_lokasi_penyimpanan
-  const [lokasiPenyimpanan, setLokasiPenyimpanan] = useState([]);
-  const [keyLokasiPenyimpanan, setKeyLokasiPenyimpanan] = useState("");
+  // PEMBELI_ID
+  // option select
+  const [pembeli, setPembeli] = useState([]);
+  const [keyPembeli, setKeyPembeli] = useState("");
 
-  const findLokasiPenyimpanan = async () => {
+  const findPembeli = async () => {
     try {
       const response = await axiosInterceptors.get(
-        `/lokasi-penyimpanan?lokasi=${keyLokasiPenyimpanan}`,
+        `/${import.meta.env.VITE_APP_NAME}/${import.meta.env.VITE_APP_VERSION}/pembelis?nama=${keyPembeli}`,
       );
-
-      const addedItemPromises = response.data.data.map(async (element) => {
-        const [namaRes] = await Promise.all([
-          axiosInterceptors.get(
-            `/inventori-barang/${element.id_inventaris_barang}`,
-          ),
-        ]);
-        return {
-          nama: namaRes.data.nama,
-        };
-      });
-
-      const addedItem = await Promise.all(addedItemPromises);
-
-      const result = response.data.data.map((item, index) => ({
-        ...item,
-        nama: addedItem[index].nama,
-      }));
-
-      setLokasiPenyimpanan(result);
-    } catch (e) {
-      const arrError = e.response.data.error.split(",");
+      setPembeli(response.data.data);
+    } catch (error) {
+      const arrError = error.response.data.error.split(",");
       dispatch(
         setNotification({ message: arrError, background: "bg-red-100" }),
       );
@@ -97,32 +72,33 @@ const PengirimanBarang = () => {
   };
 
   useEffect(() => {
-    findLokasiPenyimpanan();
-  }, [keyLokasiPenyimpanan]);
+    findPembeli();
+  }, [keyPembeli]);
 
-  //  input id_lokasi_penyimpanan
-  const [inputLokasiPenyimpanan, setInputLokasiPenyimpanan] = useState(true);
-  const [namaLokasiPenyimpanan, setNamaLokasiPenyimpanan] = useState("");
+  // input
+  const [inputPembeli, setInputPembeli] = useState(true);
+  const [namaPembeli, setNamaPembeli] = useState("");
 
-  const handleChangeOptionSelectLokasi = (event) => {
+  const handleChangeOptionSelectPembeli = (event) => {
     const selected = event.target[event.target.selectedIndex];
-    setid_lokasi_penyimpanan(selected.value);
-    setInputLokasiPenyimpanan(true);
-    setNamaLokasiPenyimpanan(selected.getAttribute("data-additional-info"));
+    setPembeli_id(selected.value);
+    setInputPembeli(true);
+    setNamaPembeli(selected.getAttribute("data-additional-info"));
   };
 
-  // option select id_pelanggan
-  const [pelanggan, setPelanggan] = useState([]);
-  const [keyPelanggan, setKeyPelanggan] = useState("");
+  // BARANG_ID
+  // option select
+  const [barang, setBarang] = useState([]);
+  const [keyBarang, setKeyBarang] = useState("");
 
-  const findPelanggan = async () => {
+  const findBarang = async () => {
     try {
       const response = await axiosInterceptors.get(
-        `/pelanggan?nama=${keyPelanggan}`,
+        `/${import.meta.env.VITE_APP_NAME}/${import.meta.env.VITE_APP_VERSION}/barangs?nama=${keyBarang}`,
       );
-      setPelanggan(response.data.data);
-    } catch (e) {
-      const arrError = e.response.data.error.split(",");
+      setBarang(response.data.data);
+    } catch (error) {
+      const arrError = error.response.data.error.split(",");
       dispatch(
         setNotification({ message: arrError, background: "bg-red-100" }),
       );
@@ -130,18 +106,18 @@ const PengirimanBarang = () => {
   };
 
   useEffect(() => {
-    findPelanggan();
-  }, [keyPelanggan]);
+    findBarang();
+  }, [keyBarang]);
 
-  //  input id_pelanggan
-  const [inputPelanggan, setInputPelanggan] = useState(true);
-  const [namaPelanggan, setNamaPelanggan] = useState("");
+  // input
+  const [inputBarang, setInputBarang] = useState(true);
+  const [namaBarang, setNamaBarang] = useState("");
 
-  const handleChangeOptionSelectPelanggan = (event) => {
+  const handleChangeOptionSelectBarang = (event) => {
     const selected = event.target[event.target.selectedIndex];
-    setid_pelanggan(selected.value);
-    setInputPelanggan(true);
-    setNamaPelanggan(selected.getAttribute("data-additional-info"));
+    setBarang_id(selected.value);
+    setInputBarang(true);
+    setNamaBarang(selected.getAttribute("data-additional-info"));
   };
 
   return (
@@ -151,7 +127,7 @@ const PengirimanBarang = () => {
         className="m-2 aspect-video w-[95%] rounded bg-teal-700 p-2 shadow md:w-[45%]"
       >
         <p className="border-b border-white text-center text-white">
-          pengiriman barang
+          penjualan barang
         </p>
         <IoIosPaperPlane className="mx-auto h-36 w-36 text-white" />
       </button>
@@ -161,7 +137,7 @@ const PengirimanBarang = () => {
         <div className="fixed bottom-0 left-0 right-0 top-0 z-10 flex items-center justify-center bg-slate-900 bg-opacity-80">
           <div className="relative w-[95%] rounded-md bg-white shadow-md shadow-teal-100 md:w-[80%] lg:w-[50%]">
             <p className="mb-2 border-b-2 border-teal-700 text-center">
-              pengiriman barang
+              penjualan barang
             </p>
             <button
               onClick={closeModal}
@@ -178,14 +154,14 @@ const PengirimanBarang = () => {
                 </div>
               )}
               <form onSubmit={handleSubmit}>
-                {inputLokasiPenyimpanan ? (
+                {inputBarang ? (
                   <button
                     type="button"
                     className="mb-1 w-full rounded-md border p-1 text-start"
-                    onClick={() => setInputLokasiPenyimpanan(false)}
+                    onClick={() => setInputBarang(false)}
                   >
-                    {namaLokasiPenyimpanan ? (
-                      namaLokasiPenyimpanan
+                    {namaBarang ? (
+                      namaBarang
                     ) : (
                       <span className="text-slate-400">barang...</span>
                     )}
@@ -193,73 +169,14 @@ const PengirimanBarang = () => {
                 ) : (
                   <div className="flex justify-between">
                     <select
-                      value={id_lokasi_penyimpanan}
-                      onChange={handleChangeOptionSelectLokasi}
+                      value={barang_id}
+                      onChange={handleChangeOptionSelectBarang}
                       className="mb-1 w-[50%] rounded-md rounded-r-none border p-1"
                     >
-                      <option selected value="">
-                        list barang...
-                      </option>
-                      {lokasiPenyimpanan.map((each) => (
+                      <option value="">list barang...</option>
+                      {barang.map((each) => (
                         <option
-                          value={each._id}
-                          data-additional-info={each.nama}
-                        >
-                          {each.nama +
-                            " | " +
-                            each.lokasi +
-                            " | " +
-                            each.jumlah}
-                        </option>
-                      ))}
-                    </select>
-                    <input
-                      type="text"
-                      placeholder="search_lokasi"
-                      className="mb-1 w-[50%] rounded-md rounded-l-none border p-1"
-                      value={keyLokasiPenyimpanan}
-                      onChange={(e) => setKeyLokasiPenyimpanan(e.target.value)}
-                    />
-                  </div>
-                )}
-                <input
-                  type="text"
-                  placeholder="jumlah"
-                  className="mb-1 w-full rounded-md border p-1"
-                  value={jumlah}
-                  onChange={(e) => setJumlah(e.target.value)}
-                />
-                <input
-                  type="datetime-local"
-                  placeholder="tanggal"
-                  className="mb-1 w-full rounded-md border p-1"
-                  value={tanggal}
-                  onChange={(e) => setTanggal(e.target.value)}
-                />
-                {inputPelanggan ? (
-                  <button
-                    type="button"
-                    className="mb-1 w-full rounded-md border p-1 text-start"
-                    onClick={() => setInputPelanggan(false)}
-                  >
-                    {namaPelanggan ? (
-                      namaPelanggan
-                    ) : (
-                      <span className="text-slate-400">pelanggan...</span>
-                    )}
-                  </button>
-                ) : (
-                  <div className="flex justify-between">
-                    <select
-                      value={id_pelanggan}
-                      onChange={handleChangeOptionSelectPelanggan}
-                      className="mb-1 w-[50%] rounded-md rounded-r-none border p-1"
-                    >
-                      <option selected value="">
-                        list pelanggan...
-                      </option>
-                      {pelanggan.map((each) => (
-                        <option
+                          key={each._id}
                           value={each._id}
                           data-additional-info={each.nama}
                         >
@@ -269,10 +186,56 @@ const PengirimanBarang = () => {
                     </select>
                     <input
                       type="text"
-                      placeholder="search..."
+                      placeholder="search_barang"
                       className="mb-1 w-[50%] rounded-md rounded-l-none border p-1"
-                      value={keyPelanggan}
-                      onChange={(e) => setKeyPelanggan(e.target.value)}
+                      value={keyBarang}
+                      onChange={(e) => setKeyBarang(e.target.value)}
+                    />
+                  </div>
+                )}
+                <input
+                  type="datetime-local"
+                  placeholder="tanggal_jual"
+                  className="mb-1 w-full rounded-md border p-1"
+                  value={tanggal_jual}
+                  onChange={(e) => setTanggal_jual(e.target.value)}
+                />
+                {inputPembeli ? (
+                  <button
+                    type="button"
+                    className="mb-1 w-full rounded-md border p-1 text-start"
+                    onClick={() => setInputPembeli(false)}
+                  >
+                    {namaPembeli ? (
+                      namaPembeli
+                    ) : (
+                      <span className="text-slate-400">pembeli...</span>
+                    )}
+                  </button>
+                ) : (
+                  <div className="flex justify-between">
+                    <select
+                      value={pembeli_id}
+                      onChange={handleChangeOptionSelectPembeli}
+                      className="mb-1 w-[50%] rounded-md rounded-r-none border p-1"
+                    >
+                      <option value="">list pembeli...</option>
+                      {pembeli.map((each) => (
+                        <option
+                          key={each._id}
+                          value={each._id}
+                          data-additional-info={each.nama}
+                        >
+                          {each.nama}
+                        </option>
+                      ))}
+                    </select>
+                    <input
+                      type="text"
+                      placeholder="search_pembeli"
+                      className="mb-1 w-[50%] rounded-md rounded-l-none border p-1"
+                      value={keyPembeli}
+                      onChange={(e) => setKeyPembeli(e.target.value)}
                     />
                   </div>
                 )}
@@ -291,4 +254,4 @@ const PengirimanBarang = () => {
   );
 };
 
-export default PengirimanBarang;
+export default PenjualanBarang;

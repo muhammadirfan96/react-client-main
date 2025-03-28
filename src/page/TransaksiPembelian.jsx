@@ -5,7 +5,7 @@ import { setNotification } from "../redux/notificationSlice.js";
 import { setConfirmation } from "../redux/confirmationSlice.js";
 import { HiMiniMagnifyingGlass } from "react-icons/hi2";
 
-const PenerimaanBarang = () => {
+const TransaksiPembelian = () => {
   const dispatch = useDispatch();
 
   const token = useSelector((state) => state.jwToken.token);
@@ -14,36 +14,50 @@ const PenerimaanBarang = () => {
   const axiosInterceptors = axiosRT(token, expire, dispatch);
 
   // view data
-  const [penerimaanBarang, setPenerimaanBarang] = useState([]);
+  const [transaksiPembelian, setTransaksiPembelian] = useState([]);
   const [allPage, setAllPage] = useState(0);
 
   const [limit, setLimit] = useState(4);
   const [page, setPage] = useState(1);
   const [key, setKey] = useState("");
   const [search, setSearch] = useState("");
-  const [searchBased, setSearchBased] = useState("tanggal");
+  const [searchBased, setSearchBased] = useState("tanggal_beli");
 
-  const findPenerimaanBarang = async () => {
+  const findTransaksiPembelian = async () => {
     try {
       const response = await axiosInterceptors.get(
-        `/penerimaan-barang?limit=${limit}&page=${page}&${key}`,
+        `${import.meta.env.VITE_APP_NAME}/${import.meta.env.VITE_APP_VERSION}/transaksi-pembelians?order=desc&limit=${limit}&page=${page}&${key}`,
       );
 
       const addedItemPromises = response.data.data.map(async (element) => {
-        const [namaRes, pemasokRes, createdByRes, updatedByRes] =
-          await Promise.all([
-            axiosInterceptors.get(
-              `/inventori-barang/${element.id_inventaris_barang}`,
-            ),
-            axiosInterceptors.get(`/pemasok/${element.id_pemasok}`),
-            axiosInterceptors.get(`/user/${element.createdBy}`),
-            axiosInterceptors.get(`/user/${element.updatedBy}`),
-          ]);
+        const results = await Promise.allSettled([
+          axiosInterceptors.get(
+            `/${import.meta.env.VITE_APP_NAME}/${import.meta.env.VITE_APP_VERSION}/barang/${element.barang_id}`,
+          ),
+          axiosInterceptors.get(
+            `/${import.meta.env.VITE_APP_NAME}/${import.meta.env.VITE_APP_VERSION}/penjual/${element.penjual_id}`,
+          ),
+          axiosInterceptors.get(`/user/${element.createdBy}`),
+          axiosInterceptors.get(`/user/${element.updatedBy}`),
+        ]);
+
         return {
-          nama: namaRes.data.nama,
-          pemasok: pemasokRes.data.nama,
-          createdBy: createdByRes.data.email,
-          updatedBy: updatedByRes.data.email,
+          nama:
+            results[0].status === "fulfilled"
+              ? (results[0].value.data?.nama ?? "deleted")
+              : "deleted",
+          penjual:
+            results[1].status === "fulfilled"
+              ? (results[1].value.data?.nama ?? "deleted")
+              : "deleted",
+          createdBy:
+            results[2].status === "fulfilled"
+              ? (results[2].value.data?.email ?? "deleted")
+              : "deleted",
+          updatedBy:
+            results[3].status === "fulfilled"
+              ? (results[3].value.data?.email ?? "deleted")
+              : "deleted",
         };
       });
 
@@ -52,12 +66,12 @@ const PenerimaanBarang = () => {
       const result = response.data.data.map((item, index) => ({
         ...item,
         nama: addedItem[index].nama,
-        pemasok: addedItem[index].pemasok,
+        penjual: addedItem[index].penjual,
         created_by: addedItem[index].createdBy,
         updated_by: addedItem[index].updatedBy,
       }));
 
-      setPenerimaanBarang(result);
+      setTransaksiPembelian(result);
       setAllPage(response.data.all_page);
     } catch (e) {
       const arrError = e.response.data.error.split(",");
@@ -71,6 +85,7 @@ const PenerimaanBarang = () => {
   for (let i = 1; i <= allPage; i++) {
     pageComponents.push(
       <button
+        key={i}
         onClick={() => setPage(i)}
         className={`${
           i == page ? "bg-teal-300" : ""
@@ -82,16 +97,16 @@ const PenerimaanBarang = () => {
   }
 
   useEffect(() => {
-    findPenerimaanBarang();
+    findTransaksiPembelian();
   }, [limit, page, key]);
 
   return token ? (
     <>
       <div className="mt-2 flex flex-wrap justify-evenly gap-2">
-        <div className="w-[95%] md:w-[75%] lg:w-[45%]">
+        <div className="w-[95%]">
           {/*judul*/}
           <p className="mb-2 rounded bg-teal-300 p-1 text-center shadow">
-            penerimaan barang
+            transaksi pembelian
           </p>
 
           {/*pagination*/}
@@ -135,9 +150,9 @@ const PenerimaanBarang = () => {
                   value={searchBased}
                   onChange={(e) => setSearchBased(e.target.value)}
                 >
-                  <option selected>tanggal</option>
-                  <option value="id_inventaris_barang">inventori</option>
-                  <option value="id_pemasok">pemasok</option>
+                  <option value={"tanggal_beli"}>tanggal_beli</option>
+                  <option value="penjual_id">penjual</option>
+                  <option value="barang_id">barang</option>
                 </select>
                 <button
                   onClick={() => setKey(`${searchBased}=${search}`)}
@@ -149,7 +164,7 @@ const PenerimaanBarang = () => {
               <div className="overflow-auto">
                 <input
                   type="text"
-                  autocomplete="off"
+                  autoComplete="off"
                   placeholder="..."
                   className="rounded border border-teal-100"
                   value={search}
@@ -162,28 +177,30 @@ const PenerimaanBarang = () => {
           {/*tabel*/}
           <div className="w-full overflow-auto rounded-md p-2 shadow-md shadow-teal-100">
             <table className="w-full">
-              <tr className="border-b-2 border-teal-700 bg-teal-300">
-                <th className="px-2">nama</th>
-                <th className="px-2">jumlah</th>
-                <th className="px-2">tanggal</th>
-                <th className="px-2">pemasok</th>
-                <th className="px-2">created_by</th>
-                <th className="px-2">updated_by</th>
-                <th className="px-2">created_at</th>
-                <th className="px-2">updated_at</th>
-              </tr>
-              {penerimaanBarang.map((each) => (
-                <tr key={each._id} className="border-b border-teal-300">
-                  <td className="px-2">{each.nama}</td>
-                  <td className="px-2">{each.jumlah}</td>
-                  <td className="px-2">{each.tanggal}</td>
-                  <td className="px-2">{each.pemasok}</td>
-                  <td className="px-2">{each.created_by}</td>
-                  <td className="px-2">{each.updated_by}</td>
-                  <td className="px-2">{each.createdAt}</td>
-                  <td className="px-2">{each.updatedAt}</td>
+              <thead>
+                <tr className="border-b-2 border-teal-700 bg-teal-300">
+                  <th className="px-2">nama</th>
+                  <th className="px-2">tanggal_beli</th>
+                  <th className="px-2">penjual</th>
+                  <th className="px-2">created_by</th>
+                  <th className="px-2">updated_by</th>
+                  <th className="px-2">created_at</th>
+                  <th className="px-2">updated_at</th>
                 </tr>
-              ))}
+              </thead>
+              <tbody>
+                {transaksiPembelian.map((each) => (
+                  <tr key={each._id} className="border-b border-teal-300">
+                    <td className="px-2">{each.nama}</td>
+                    <td className="px-2">{each.tanggal_beli}</td>
+                    <td className="px-2">{each.penjual}</td>
+                    <td className="px-2">{each.created_by}</td>
+                    <td className="px-2">{each.updated_by}</td>
+                    <td className="px-2">{each.createdAt}</td>
+                    <td className="px-2">{each.updatedAt}</td>
+                  </tr>
+                ))}
+              </tbody>
             </table>
           </div>
         </div>
@@ -194,4 +211,4 @@ const PenerimaanBarang = () => {
   );
 };
 
-export default PenerimaanBarang;
+export default TransaksiPembelian;

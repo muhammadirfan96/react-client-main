@@ -6,13 +6,13 @@ import { jwtDecode } from "jwt-decode";
 import { useEffect } from "react";
 
 const axiosDefault = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: import.meta.env.VITE_API_URL,
   withCredentials: true,
 });
 
 const axiosRT = (token, expire, dispatch) => {
   const axiosInterceptors = axios.create({
-    baseURL: "http://localhost:5000",
+    baseURL: import.meta.env.VITE_API_URL,
     withCredentials: true,
   });
 

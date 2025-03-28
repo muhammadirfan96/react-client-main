@@ -5,7 +5,7 @@ import { setNotification } from "../redux/notificationSlice.js";
 import { setConfirmation } from "../redux/confirmationSlice.js";
 import { HiMiniMagnifyingGlass } from "react-icons/hi2";
 
-const Pemasok = () => {
+const Pembeli = () => {
   const dispatch = useDispatch();
 
   const token = useSelector((state) => state.jwToken.token);
@@ -22,14 +22,16 @@ const Pemasok = () => {
 
   const handleAdd = () => {
     setForm(null);
-    setNamaModal("add pemasok");
+    setNamaModal("add pembeli");
     openModal();
   };
 
   const handleUpdate = async (id) => {
     setForm({ id: id });
-    setNamaModal("update pemasok");
-    const oldData = await axiosInterceptors.get(`/pemasok/${id}`);
+    setNamaModal("update pembeli");
+    const oldData = await axiosInterceptors.get(
+      `/${import.meta.env.VITE_APP_NAME}/${import.meta.env.VITE_APP_VERSION}/pembeli/${id}`,
+    );
     openModal();
     setNama(oldData.data?.nama);
     setAlamat(oldData.data?.alamat);
@@ -42,13 +44,20 @@ const Pemasok = () => {
   };
 
   const handleDelete = (id) => {
-    deleteData(id);
-    dispatch(setConfirmation(false));
+    dispatch(
+      setConfirmation({
+        message: "The selected data will be permanently deleted?",
+        handleOke: () => deleteData(id),
+      }),
+    );
   };
 
   const addData = async () => {
     try {
-      await axiosInterceptors.post(`/pemasok`, { nama, alamat, kontak });
+      await axiosInterceptors.post(
+        `/${import.meta.env.VITE_APP_NAME}/${import.meta.env.VITE_APP_VERSION}/pembeli`,
+        { nama, alamat, kontak },
+      );
       dispatch(
         setNotification({
           message: "new data has been added",
@@ -56,7 +65,7 @@ const Pemasok = () => {
         }),
       );
       closeModal();
-      findPemasok();
+      findPembeli();
     } catch (e) {
       const arrError = e.response.data.error.split(",");
       setErrForm(arrError);
@@ -65,11 +74,14 @@ const Pemasok = () => {
 
   const updateData = async (id) => {
     try {
-      await axiosInterceptors.patch(`/pemasok/${id}`, {
-        nama,
-        alamat,
-        kontak,
-      });
+      await axiosInterceptors.patch(
+        `/${import.meta.env.VITE_APP_NAME}/${import.meta.env.VITE_APP_VERSION}/pembeli/${id}`,
+        {
+          nama,
+          alamat,
+          kontak,
+        },
+      );
 
       dispatch(
         setNotification({
@@ -78,7 +90,7 @@ const Pemasok = () => {
         }),
       );
       closeModal();
-      findPemasok();
+      findPembeli();
     } catch (e) {
       const arrError = e.response.data.error.split(",");
       setErrForm(arrError);
@@ -87,14 +99,16 @@ const Pemasok = () => {
 
   const deleteData = async (id) => {
     try {
-      await axiosInterceptors.delete(`/pemasok/${id}`);
+      await axiosInterceptors.delete(
+        `/${import.meta.env.VITE_APP_NAME}/${import.meta.env.VITE_APP_VERSION}/pembeli/${id}`,
+      );
       dispatch(
         setNotification({
           message: "selected data has been deleted",
           background: "bg-teal-100",
         }),
       );
-      findPemasok();
+      findPembeli();
     } catch (e) {
       const arrError = e.response.data.error.split(",");
       dispatch(
@@ -104,7 +118,7 @@ const Pemasok = () => {
   };
 
   // view data
-  const [pemasok, setPemasok] = useState([]);
+  const [pembeli, setPembeli] = useState([]);
   const [allPage, setAllPage] = useState(0);
 
   const [limit, setLimit] = useState(4);
@@ -113,20 +127,26 @@ const Pemasok = () => {
   const [search, setSearch] = useState("");
   const [searchBased, setSearchBased] = useState("nama");
 
-  const findPemasok = async () => {
+  const findPembeli = async () => {
     try {
       const response = await axiosInterceptors.get(
-        `/pemasok?limit=${limit}&page=${page}&${key}`,
+        `/${import.meta.env.VITE_APP_NAME}/${import.meta.env.VITE_APP_VERSION}/pembelis?order=desc&limit=${limit}&page=${page}&${key}`,
       );
 
       const addedItemPromises = response.data.data.map(async (element) => {
-        const [createdByRes, updatedByRes] = await Promise.all([
+        const results = await Promise.allSettled([
           axiosInterceptors.get(`/user/${element.createdBy}`),
           axiosInterceptors.get(`/user/${element.updatedBy}`),
         ]);
         return {
-          createdBy: createdByRes.data.email,
-          updatedBy: updatedByRes.data.email,
+          createdBy:
+            results[0].status === "fulfilled"
+              ? (results[0].value.data?.email ?? "deleted")
+              : "deleted",
+          updatedBy:
+            results[1].status === "fulfilled"
+              ? (results[1].value.data?.email ?? "deleted")
+              : "deleted",
         };
       });
 
@@ -138,7 +158,7 @@ const Pemasok = () => {
         updated_by: addedItem[index].updatedBy,
       }));
 
-      setPemasok(result);
+      setPembeli(result);
       setAllPage(response.data.all_page);
     } catch (e) {
       const arrError = e.response.data.error.split(",");
@@ -152,6 +172,7 @@ const Pemasok = () => {
   for (let i = 1; i <= allPage; i++) {
     pageComponents.push(
       <button
+        key={i}
         onClick={() => setPage(i)}
         className={`${
           i == page ? "bg-teal-300" : ""
@@ -175,16 +196,16 @@ const Pemasok = () => {
   };
 
   useEffect(() => {
-    findPemasok();
+    findPembeli();
   }, [limit, page, key]);
 
   return token ? (
     <>
       <div className="mt-2 flex flex-wrap justify-evenly gap-2">
-        <div className="w-[95%] md:w-[75%] lg:w-[45%]">
+        <div className="w-[95%]">
           {/*judul*/}
           <p className="mb-2 rounded bg-teal-300 p-1 text-center shadow">
-            pemasok
+            pembeli
           </p>
 
           {/*pagination*/}
@@ -228,9 +249,9 @@ const Pemasok = () => {
                   value={searchBased}
                   onChange={(e) => setSearchBased(e.target.value)}
                 >
-                  <option selected>nama</option>
-                  <option>alamat</option>
-                  <option>kontak</option>
+                  <option value="nama">nama</option>
+                  <option value="alamat">alamat</option>
+                  <option value={`kontak`}>kontak</option>
                 </select>
                 <button
                   onClick={() => setKey(`${searchBased}=${search}`)}
@@ -242,7 +263,7 @@ const Pemasok = () => {
               <div className="overflow-auto">
                 <input
                   type="text"
-                  autocomplete="off"
+                  autoComplete="off"
                   placeholder="..."
                   className="rounded border border-teal-100"
                   value={search}
@@ -262,51 +283,45 @@ const Pemasok = () => {
           {/*tabel*/}
           <div className="w-full overflow-auto rounded-md p-2 shadow-md shadow-teal-100">
             <table className="w-full">
-              <tr className="border-b-2 border-teal-700 bg-teal-300">
-                <th className="px-2">nama</th>
-                <th className="px-2">alamat</th>
-                <th className="px-2">kontak</th>
-                <th className="px-2">created_by</th>
-                <th className="px-2">updated_by</th>
-                <th className="px-2">created_at</th>
-                <th className="px-2">updated_at</th>
-                <th className="px-2">action</th>
-              </tr>
-              {pemasok.map((each) => (
-                <tr key={each._id} className="border-b border-teal-300">
-                  <td className="px-2">{each.nama}</td>
-                  <td className="px-2">{each.alamat}</td>
-                  <td className="px-2">{each.kontak}</td>
-                  <td className="px-2">{each.created_by}</td>
-                  <td className="px-2">{each.updated_by}</td>
-                  <td className="px-2">{each.createdAt}</td>
-                  <td className="px-2">{each.updatedAt}</td>
-                  <td className="px-2">
-                    <button
-                      onClick={() => handleUpdate(each._id)}
-                      className="w-full rounded bg-green-700 p-1 text-xs italic text-white"
-                    >
-                      update
-                    </button>
-                    <button
-                      onClick={() =>
-                        dispatch(
-                          setConfirmation({
-                            message:
-                              "the selected data will be permanently delete ?",
-                            handleOke: () => handleDelete(each._id),
-                            handleCancel: () =>
-                              dispatch(setConfirmation(false)),
-                          }),
-                        )
-                      }
-                      className="w-full rounded bg-red-700 p-1 text-xs italic text-white"
-                    >
-                      delete
-                    </button>
-                  </td>
+              <thead>
+                <tr className="border-b-2 border-teal-700 bg-teal-300">
+                  <th className="px-2">nama</th>
+                  <th className="px-2">alamat</th>
+                  <th className="px-2">kontak</th>
+                  <th className="px-2">created_by</th>
+                  <th className="px-2">updated_by</th>
+                  <th className="px-2">created_at</th>
+                  <th className="px-2">updated_at</th>
+                  <th className="px-2">action</th>
                 </tr>
-              ))}
+              </thead>
+              <tbody>
+                {pembeli.map((each) => (
+                  <tr key={each._id} className="border-b border-teal-300">
+                    <td className="px-2">{each.nama}</td>
+                    <td className="px-2">{each.alamat}</td>
+                    <td className="px-2">{each.kontak}</td>
+                    <td className="px-2">{each.created_by}</td>
+                    <td className="px-2">{each.updated_by}</td>
+                    <td className="px-2">{each.createdAt}</td>
+                    <td className="px-2">{each.updatedAt}</td>
+                    <td className="px-2">
+                      <button
+                        onClick={() => handleUpdate(each._id)}
+                        className="w-full rounded bg-green-700 p-1 text-xs italic text-white"
+                      >
+                        update
+                      </button>
+                      <button
+                        onClick={() => handleDelete(each._id)}
+                        className="w-full rounded bg-red-700 p-1 text-xs italic text-white"
+                      >
+                        delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
             </table>
           </div>
         </div>
@@ -325,7 +340,7 @@ const Pemasok = () => {
             >
               x
             </button>
-            <div className="mt-1 max-h-96 overflow-auto p-2 md:max-h-72">
+            <div className="mt-1 max-h-[95vh] overflow-auto p-2">
               {errForm && (
                 <div className="mb-2 rounded border border-red-700 p-1 text-xs italic text-red-700">
                   {errForm.map((err, index) => (
@@ -372,4 +387,4 @@ const Pemasok = () => {
   );
 };
 
-export default Pemasok;
+export default Pembeli;

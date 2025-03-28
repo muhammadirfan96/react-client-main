@@ -2,27 +2,24 @@ import { IoReceiptOutline } from "react-icons/io5";
 import { IoIosPaperPlane } from "react-icons/io";
 import { MdCompareArrows } from "react-icons/md";
 import { AiOutlinePlusCircle } from "react-icons/ai";
-import PenambahanBarang from "../gudang/PenambahanBarang.jsx";
-import PenerimaanBarang from "../gudang/PenerimaanBarang.jsx";
-import PengirimanBarang from "../gudang/PengirimanBarang.jsx";
-import PergeseranBarang from "../gudang/PergeseranBarang.jsx";
 import { useSelector } from "react-redux";
+import PembelianBarang from "../aplications/PembelianBarang";
+import PenjualanBarang from "../aplications/PenjualanBarang";
 
-const GudangController = () => {
-  const token = useSelector((state) => state.jwToken.token);
+const Applications = () => {
+  const token = true;
+  //   const token = useSelector((state) => state.jwToken.token);
   return token ? (
     <>
       <div className="mt-2 flex flex-wrap justify-evenly gap-2">
-        <div className="w-[95%] md:w-[75%] lg:w-[45%]">
+        <div className="w-[95%]">
           {/*judul*/}
           <p className="mb-2 rounded bg-teal-300 p-1 text-center shadow">
-            manage gudang
+            applications
           </p>
           <div className="flex flex-wrap justify-evenly gap-2">
-            <PenambahanBarang />
-            <PenerimaanBarang />
-            <PengirimanBarang />
-            <PergeseranBarang />
+            <PembelianBarang />
+            <PenjualanBarang />
           </div>
         </div>
       </div>
@@ -32,4 +29,4 @@ const GudangController = () => {
   );
 };
 
-export default GudangController;
+export default Applications;
