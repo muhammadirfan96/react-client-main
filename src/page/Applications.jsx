@@ -7,8 +7,7 @@ import PembelianBarang from "../aplications/PembelianBarang";
 import PenjualanBarang from "../aplications/PenjualanBarang";
 
 const Applications = () => {
-  const token = true;
-  //   const token = useSelector((state) => state.jwToken.token);
+  const token = useSelector((state) => state.jwToken.token);
   return token ? (
     <>
       <div className="mt-2 flex flex-wrap justify-evenly gap-2">
