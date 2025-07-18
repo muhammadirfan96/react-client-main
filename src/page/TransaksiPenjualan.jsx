@@ -175,34 +175,40 @@ const TransaksiPenjualan = () => {
           </div>
 
           {/*tabel*/}
-          <div className="w-full overflow-auto rounded-md p-2 shadow-md shadow-teal-100">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b-2 border-teal-700 bg-teal-300">
-                  <th className="px-2">nama</th>
-                  <th className="px-2">tanggal_jual</th>
-                  <th className="px-2">pembeli</th>
-                  <th className="px-2">created_by</th>
-                  <th className="px-2">updated_by</th>
-                  <th className="px-2">created_at</th>
-                  <th className="px-2">updated_at</th>
-                </tr>
-              </thead>
-              <tbody>
-                {transaksiPenjualan.map((each) => (
-                  <tr key={each._id} className="border-b border-teal-300">
-                    <td className="px-2">{each.nama}</td>
-                    <td className="px-2">{each.tanggal_jual}</td>
-                    <td className="px-2">{each.pembeli}</td>
-                    <td className="px-2">{each.created_by}</td>
-                    <td className="px-2">{each.updated_by}</td>
-                    <td className="px-2">{each.createdAt}</td>
-                    <td className="px-2">{each.updatedAt}</td>
+          {transaksiPenjualan.length === 0 ? (
+            <div className="m-4 rounded bg-red-100 p-4 text-center">
+              not found
+            </div>
+          ) : (
+            <div className="w-full overflow-auto rounded-md p-2 shadow-md shadow-teal-100">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b-2 border-teal-700 bg-teal-300">
+                    <th className="px-2">nama</th>
+                    <th className="px-2">tanggal_jual</th>
+                    <th className="px-2">pembeli</th>
+                    <th className="px-2">created_by</th>
+                    <th className="px-2">updated_by</th>
+                    <th className="px-2">created_at</th>
+                    <th className="px-2">updated_at</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {transaksiPenjualan.map((each) => (
+                    <tr key={each._id} className="border-b border-teal-300">
+                      <td className="px-2">{each.nama}</td>
+                      <td className="px-2">{each.tanggal_jual}</td>
+                      <td className="px-2">{each.pembeli}</td>
+                      <td className="px-2">{each.created_by}</td>
+                      <td className="px-2">{each.updated_by}</td>
+                      <td className="px-2">{each.createdAt}</td>
+                      <td className="px-2">{each.updatedAt}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </div>
     </>

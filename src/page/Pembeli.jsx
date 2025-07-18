@@ -281,49 +281,55 @@ const Pembeli = () => {
           </button>
 
           {/*tabel*/}
-          <div className="w-full overflow-auto rounded-md p-2 shadow-md shadow-teal-100">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b-2 border-teal-700 bg-teal-300">
-                  <th className="px-2">nama</th>
-                  <th className="px-2">alamat</th>
-                  <th className="px-2">kontak</th>
-                  <th className="px-2">created_by</th>
-                  <th className="px-2">updated_by</th>
-                  <th className="px-2">created_at</th>
-                  <th className="px-2">updated_at</th>
-                  <th className="px-2">action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {pembeli.map((each) => (
-                  <tr key={each._id} className="border-b border-teal-300">
-                    <td className="px-2">{each.nama}</td>
-                    <td className="px-2">{each.alamat}</td>
-                    <td className="px-2">{each.kontak}</td>
-                    <td className="px-2">{each.created_by}</td>
-                    <td className="px-2">{each.updated_by}</td>
-                    <td className="px-2">{each.createdAt}</td>
-                    <td className="px-2">{each.updatedAt}</td>
-                    <td className="px-2">
-                      <button
-                        onClick={() => handleUpdate(each._id)}
-                        className="w-full rounded bg-green-700 p-1 text-xs italic text-white"
-                      >
-                        update
-                      </button>
-                      <button
-                        onClick={() => handleDelete(each._id)}
-                        className="w-full rounded bg-red-700 p-1 text-xs italic text-white"
-                      >
-                        delete
-                      </button>
-                    </td>
+          {pembeli.length === 0 ? (
+            <div className="m-4 rounded bg-red-100 p-4 text-center">
+              not found
+            </div>
+          ) : (
+            <div className="w-full overflow-auto rounded-md p-2 shadow-md shadow-teal-100">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b-2 border-teal-700 bg-teal-300">
+                    <th className="px-2">nama</th>
+                    <th className="px-2">alamat</th>
+                    <th className="px-2">kontak</th>
+                    <th className="px-2">created_by</th>
+                    <th className="px-2">updated_by</th>
+                    <th className="px-2">created_at</th>
+                    <th className="px-2">updated_at</th>
+                    <th className="px-2">action</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {pembeli.map((each) => (
+                    <tr key={each._id} className="border-b border-teal-300">
+                      <td className="px-2">{each.nama}</td>
+                      <td className="px-2">{each.alamat}</td>
+                      <td className="px-2">{each.kontak}</td>
+                      <td className="px-2">{each.created_by}</td>
+                      <td className="px-2">{each.updated_by}</td>
+                      <td className="px-2">{each.createdAt}</td>
+                      <td className="px-2">{each.updatedAt}</td>
+                      <td className="px-2">
+                        <button
+                          onClick={() => handleUpdate(each._id)}
+                          className="w-full rounded bg-green-700 p-1 text-xs italic text-white"
+                        >
+                          update
+                        </button>
+                        <button
+                          onClick={() => handleDelete(each._id)}
+                          className="w-full rounded bg-red-700 p-1 text-xs italic text-white"
+                        >
+                          delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </div>
 

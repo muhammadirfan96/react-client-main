@@ -235,63 +235,69 @@ const Product = () => {
           </div>
 
           {/* Card */}
-          <div className="flex flex-wrap justify-evenly gap-2">
-            {barang.map((each) => (
-              <div
-                key={each._id}
-                onClick={() => {
-                  showBarang(each._id);
-                  openModal();
-                }}
-                className="w-[48%] cursor-pointer rounded-md border border-teal-300 p-2 shadow-md shadow-teal-100 md:w-[24%] xl:w-[15%]"
-              >
-                {/* Image */}
-                <div className="flex h-32 w-full items-center justify-center overflow-hidden rounded-md bg-gray-100">
-                  <img
-                    src={
-                      each.photo
-                        ? `${import.meta.env.VITE_API_URL}/${each.photo}`
-                        : "/default.png"
-                    }
-                    alt="product"
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-
-                {/* Product Info */}
-                <div className="mt-2 text-xs">
-                  <p className="line-clamp-2 text-sm font-bold text-teal-700">
-                    {each.nama}
-                  </p>
-                  <p className="font-semibold text-gray-800">
-                    {each.harga_jual - each.harga_jual * each.diskon}
-                  </p>
-                  <p className="text-gray-400 line-through">
-                    {each.harga_jual}
-                  </p>
-                  <p className="font-semibold text-teal-700">
-                    {each.diskon * 100}%
-                  </p>
-                  <p className="line-clamp-2 text-gray-600">
-                    {each.spesifikasi}
-                  </p>
-                </div>
-
-                {/* Button */}
-                <button
+          {barang.length === 0 ? (
+            <div className="m-4 rounded bg-red-100 p-4 text-center">
+              not found
+            </div>
+          ) : (
+            <div className="flex flex-wrap justify-evenly gap-2">
+              {barang.map((each) => (
+                <div
+                  key={each._id}
                   onClick={() => {
-                    // event.stopPropagation();
-                    // alert("masukkan ke keranjang");
                     showBarang(each._id);
                     openModal();
                   }}
-                  className="mt-2 w-full rounded-md bg-teal-600 py-1 text-xs text-white transition hover:bg-teal-700"
+                  className="w-[48%] cursor-pointer rounded-md border border-teal-300 p-2 shadow-md shadow-teal-100 md:w-[24%] xl:w-[15%]"
                 >
-                  detail
-                </button>
-              </div>
-            ))}
-          </div>
+                  {/* Image */}
+                  <div className="flex h-32 w-full items-center justify-center overflow-hidden rounded-md bg-gray-100">
+                    <img
+                      src={
+                        each.photo
+                          ? `${import.meta.env.VITE_API_URL}/${each.photo}`
+                          : "/default.png"
+                      }
+                      alt="product"
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+
+                  {/* Product Info */}
+                  <div className="mt-2 text-xs">
+                    <p className="line-clamp-2 text-sm font-bold text-teal-700">
+                      {each.nama}
+                    </p>
+                    <p className="font-semibold text-gray-800">
+                      {each.harga_jual - each.harga_jual * each.diskon}
+                    </p>
+                    <p className="text-gray-400 line-through">
+                      {each.harga_jual}
+                    </p>
+                    <p className="font-semibold text-teal-700">
+                      {each.diskon * 100}%
+                    </p>
+                    <p className="line-clamp-2 text-gray-600">
+                      {each.spesifikasi}
+                    </p>
+                  </div>
+
+                  {/* Button */}
+                  <button
+                    onClick={() => {
+                      // event.stopPropagation();
+                      // alert("masukkan ke keranjang");
+                      showBarang(each._id);
+                      openModal();
+                    }}
+                    className="mt-2 w-full rounded-md bg-teal-600 py-1 text-xs text-white transition hover:bg-teal-700"
+                  >
+                    detail
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 

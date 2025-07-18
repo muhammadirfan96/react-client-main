@@ -298,95 +298,101 @@ const Barang = () => {
           </div>
 
           {/* Table */}
-          <div className="w-full overflow-auto rounded-md p-2 shadow-md shadow-teal-100">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b-2 border-teal-700 bg-teal-300">
-                  <th className="px-2">Foto</th>
-                  <th className="px-2">Kode</th>
-                  <th className="px-2">Nama</th>
-                  <th className="px-2">Spesifikasi</th>
-                  <th className="px-2">Harga Beli</th>
-                  <th className="px-2">Harga Jual</th>
-                  <th className="px-2">Diskon</th>
-                  <th className="px-2">Catatan</th>
-                  <th className="px-2">Status</th>
-                  <th className="px-2">Created By</th>
-                  <th className="px-2">Updated By</th>
-                  <th className="px-2">Created At</th>
-                  <th className="px-2">Updated At</th>
-                  <th className="px-2">action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {barang.map((each) => (
-                  <tr key={each._id} className="border-b border-teal-300">
-                    <td>
-                      <div className="relative inline-block">
-                        <img
-                          src={
-                            each.photo
-                              ? `${import.meta.env.VITE_API_URL}/${each.photo}`
-                              : "/default.png"
-                          }
-                          alt="User Photo"
-                          className="h-12 w-12 rounded-full border border-teal-300 object-cover"
-                        />
-                        <label
-                          htmlFor={`input_image${each._id}`}
-                          className="absolute bottom-0 right-0 flex h-5 w-5 cursor-pointer items-center justify-center rounded-full bg-teal-500 p-1 shadow-md transition-all hover:bg-teal-600 active:scale-90"
-                        >
-                          <FaPencilAlt className="text-xs text-white" />
-                        </label>
-                        <input
-                          id={`input_image${each._id}`}
-                          type="file"
-                          className="hidden"
-                          accept="image/*"
-                          // onChange={(e) => {
-                          //   setPhoto(e.target.files[0]);
-                          //   uploadPhoto(each._id);
-                          // }}
-                          onChange={(e) => {
-                            if (e.target.files.length > 0) {
-                              uploadPhoto(each._id, e.target.files[0]); // Kirim file langsung
-                            }
-                          }}
-                        />
-                      </div>
-                    </td>
-
-                    <td className="px-2">{each.kode}</td>
-                    <td className="px-2">{each.nama}</td>
-                    <td className="px-2">{each.spesifikasi}</td>
-                    <td className="px-2">{each.harga_beli}</td>
-                    <td className="px-2">{each.harga_jual}</td>
-                    <td className="px-2">{each.diskon}</td>
-                    <td className="px-2">{each.catatan}</td>
-                    <td className="px-2">{each.status}</td>
-                    <td className="px-2">{each.created_by}</td>
-                    <td className="px-2">{each.updated_by}</td>
-                    <td className="px-2">{each.createdAt}</td>
-                    <td className="px-2">{each.updatedAt}</td>
-                    <td className="px-2">
-                      <button
-                        onClick={() => handleUpdate(each._id)}
-                        className="w-full rounded bg-green-700 p-1 text-xs italic text-white"
-                      >
-                        update
-                      </button>
-                      <button
-                        onClick={() => handleDelete(each._id)}
-                        className="w-full rounded bg-red-700 p-1 text-xs italic text-white"
-                      >
-                        delete
-                      </button>
-                    </td>
+          {barang.length === 0 ? (
+            <div className="m-4 rounded bg-red-100 p-4 text-center">
+              not found
+            </div>
+          ) : (
+            <div className="w-full overflow-auto rounded-md p-2 shadow-md shadow-teal-100">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b-2 border-teal-700 bg-teal-300">
+                    <th className="px-2">Foto</th>
+                    <th className="px-2">Kode</th>
+                    <th className="px-2">Nama</th>
+                    <th className="px-2">Spesifikasi</th>
+                    <th className="px-2">Harga Beli</th>
+                    <th className="px-2">Harga Jual</th>
+                    <th className="px-2">Diskon</th>
+                    <th className="px-2">Catatan</th>
+                    <th className="px-2">Status</th>
+                    <th className="px-2">Created By</th>
+                    <th className="px-2">Updated By</th>
+                    <th className="px-2">Created At</th>
+                    <th className="px-2">Updated At</th>
+                    <th className="px-2">action</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {barang.map((each) => (
+                    <tr key={each._id} className="border-b border-teal-300">
+                      <td>
+                        <div className="relative inline-block">
+                          <img
+                            src={
+                              each.photo
+                                ? `${import.meta.env.VITE_API_URL}/${each.photo}`
+                                : "/default.png"
+                            }
+                            alt="User Photo"
+                            className="h-12 w-12 rounded-full border border-teal-300 object-cover"
+                          />
+                          <label
+                            htmlFor={`input_image${each._id}`}
+                            className="absolute bottom-0 right-0 flex h-5 w-5 cursor-pointer items-center justify-center rounded-full bg-teal-500 p-1 shadow-md transition-all hover:bg-teal-600 active:scale-90"
+                          >
+                            <FaPencilAlt className="text-xs text-white" />
+                          </label>
+                          <input
+                            id={`input_image${each._id}`}
+                            type="file"
+                            className="hidden"
+                            accept="image/*"
+                            // onChange={(e) => {
+                            //   setPhoto(e.target.files[0]);
+                            //   uploadPhoto(each._id);
+                            // }}
+                            onChange={(e) => {
+                              if (e.target.files.length > 0) {
+                                uploadPhoto(each._id, e.target.files[0]); // Kirim file langsung
+                              }
+                            }}
+                          />
+                        </div>
+                      </td>
+
+                      <td className="px-2">{each.kode}</td>
+                      <td className="px-2">{each.nama}</td>
+                      <td className="px-2">{each.spesifikasi}</td>
+                      <td className="px-2">{each.harga_beli}</td>
+                      <td className="px-2">{each.harga_jual}</td>
+                      <td className="px-2">{each.diskon}</td>
+                      <td className="px-2">{each.catatan}</td>
+                      <td className="px-2">{each.status}</td>
+                      <td className="px-2">{each.created_by}</td>
+                      <td className="px-2">{each.updated_by}</td>
+                      <td className="px-2">{each.createdAt}</td>
+                      <td className="px-2">{each.updatedAt}</td>
+                      <td className="px-2">
+                        <button
+                          onClick={() => handleUpdate(each._id)}
+                          className="w-full rounded bg-green-700 p-1 text-xs italic text-white"
+                        >
+                          update
+                        </button>
+                        <button
+                          onClick={() => handleDelete(each._id)}
+                          className="w-full rounded bg-red-700 p-1 text-xs italic text-white"
+                        >
+                          delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </div>
 
