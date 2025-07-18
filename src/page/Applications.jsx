@@ -1,7 +1,7 @@
-import { IoReceiptOutline } from "react-icons/io5";
-import { IoIosPaperPlane } from "react-icons/io";
-import { MdCompareArrows } from "react-icons/md";
-import { AiOutlinePlusCircle } from "react-icons/ai";
+// import { IoReceiptOutline } from "react-icons/io5";
+// import { IoIosPaperPlane } from "react-icons/io";
+// import { MdCompareArrows } from "react-icons/md";
+// import { AiOutlinePlusCircle } from "react-icons/ai";
 import { useSelector } from "react-redux";
 import PembelianBarang from "../aplications/PembelianBarang";
 import PenjualanBarang from "../aplications/PenjualanBarang";

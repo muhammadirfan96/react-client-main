@@ -1,10 +1,10 @@
-import React from "react";
+// import React from "react";
 import { IoReceiptOutline } from "react-icons/io5";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { axiosRT } from "../config/axios.js";
 import { useDispatch, useSelector } from "react-redux";
 import { setNotification } from "../redux/notificationSlice.js";
-import { setConfirmation } from "../redux/confirmationSlice.js";
+// import { setConfirmation } from "../redux/confirmationSlice.js";
 
 const PembelianBarang = () => {
   const dispatch = useDispatch();
@@ -62,7 +62,25 @@ const PembelianBarang = () => {
   const [penjual, setPenjual] = useState([]);
   const [keyPenjual, setKeyPenjual] = useState("");
 
-  const findPenjual = async () => {
+  // const findPenjual = async () => {
+  //   try {
+  //     const response = await axiosInterceptors.get(
+  //       `/${import.meta.env.VITE_APP_NAME}/${import.meta.env.VITE_APP_VERSION}/penjuals?nama=${keyPenjual}`,
+  //     );
+  //     setPenjual(response.data.data);
+  //   } catch (error) {
+  //     const arrError = error.response.data.error.split(",");
+  //     dispatch(
+  //       setNotification({ message: arrError, background: "bg-red-100" }),
+  //     );
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   findPenjual();
+  // }, [keyPenjual]);
+
+  const findPenjual = useCallback(async () => {
     try {
       const response = await axiosInterceptors.get(
         `/${import.meta.env.VITE_APP_NAME}/${import.meta.env.VITE_APP_VERSION}/penjuals?nama=${keyPenjual}`,
@@ -74,11 +92,11 @@ const PembelianBarang = () => {
         setNotification({ message: arrError, background: "bg-red-100" }),
       );
     }
-  };
+  }, [keyPenjual, dispatch, axiosInterceptors]);
 
   useEffect(() => {
     findPenjual();
-  }, [keyPenjual]);
+  }, [findPenjual]);
 
   // input
   const [inputPenjual, setInputPenjual] = useState(true);

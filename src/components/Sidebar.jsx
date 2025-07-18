@@ -1,9 +1,9 @@
 import { BsSpeedometer, BsBasket, BsCaretRight } from "react-icons/bs";
-import { AiOutlineShopping, AiOutlineStock } from "react-icons/ai";
+import { AiOutlineShopping } from "react-icons/ai";
 import { FaUserFriends } from "react-icons/fa";
 import { IoReceiptOutline, IoPeopleOutline } from "react-icons/io5";
 import { IoIosPaperPlane } from "react-icons/io";
-import { MdCompareArrows, MdOutlineStorage } from "react-icons/md";
+// import { MdCompareArrows, MdOutlineStorage } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 

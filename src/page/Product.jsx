@@ -2,10 +2,10 @@ import { useState, useEffect } from "react";
 import { axiosRT } from "../config/axios.js";
 import { useDispatch, useSelector } from "react-redux";
 import { setNotification } from "../redux/notificationSlice.js";
-import { setConfirmation } from "../redux/confirmationSlice.js";
+// import { setConfirmation } from "../redux/confirmationSlice.js";
 import { HiMiniMagnifyingGlass } from "react-icons/hi2";
-import { FaPencilAlt } from "react-icons/fa";
-import { FaArrowUp, FaArrowDown } from "react-icons/fa";
+// import { FaPencilAlt } from "react-icons/fa";
+// import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 
 const Product = () => {
   const dispatch = useDispatch();
@@ -220,14 +220,14 @@ const Product = () => {
                 <input
                   type="button"
                   value="&darr;"
-                  onClick={(e) => setOrder("asc")}
+                  onClick={() => setOrder("asc")}
                   className={`${order == "asc" ? "bg-teal-300" : ""} mx-1 cursor-pointer rounded border border-teal-100 px-2 text-xs`}
                 />
 
                 <input
                   type="button"
                   value="&uarr;"
-                  onClick={(e) => setOrder("desc")}
+                  onClick={() => setOrder("desc")}
                   className={`${order == "desc" ? "bg-teal-300" : ""} mx-1 cursor-pointer rounded border border-teal-100 px-2 text-xs`}
                 />
               </div>
@@ -279,7 +279,7 @@ const Product = () => {
 
                 {/* Button */}
                 <button
-                  onClick={(event) => {
+                  onClick={() => {
                     // event.stopPropagation();
                     // alert("masukkan ke keranjang");
                     showBarang(each._id);

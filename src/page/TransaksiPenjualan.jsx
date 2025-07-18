@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { axiosRT } from "../config/axios.js";
 import { useDispatch, useSelector } from "react-redux";
 import { setNotification } from "../redux/notificationSlice.js";
-import { setConfirmation } from "../redux/confirmationSlice.js";
+// import { setConfirmation } from "../redux/confirmationSlice.js";
 import { HiMiniMagnifyingGlass } from "react-icons/hi2";
 
 const TransaksiPenjualan = () => {

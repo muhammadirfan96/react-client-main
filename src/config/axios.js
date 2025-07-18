@@ -1,9 +1,9 @@
 import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
+// import { useDispatch, useSelector } from "react-redux";
 import { setToken, setExpire, setUsername } from "../redux/tokenSlice.js";
 import { setNotification } from "../redux/notificationSlice.js";
 import { jwtDecode } from "jwt-decode";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 
 const axiosDefault = axios.create({
   baseURL: import.meta.env.VITE_API_URL,

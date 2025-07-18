@@ -1,10 +1,10 @@
 import Logout from "../auth/Logout.jsx";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const TopbarMobile = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const username = useSelector((state) => state.jwToken.username);
 
   return (

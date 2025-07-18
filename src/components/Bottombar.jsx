@@ -1,4 +1,4 @@
-import { BsSpeedometer, BsBasket, BsCaretRight } from "react-icons/bs";
+import { BsSpeedometer, BsBasket } from "react-icons/bs";
 import { AiOutlineShopping, AiOutlineStock } from "react-icons/ai";
 import { FaUserFriends } from "react-icons/fa";
 import { IoReceiptOutline, IoPeopleOutline } from "react-icons/io5";
